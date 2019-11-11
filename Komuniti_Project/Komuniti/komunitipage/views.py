@@ -20,8 +20,8 @@ def post_new(request):
     posts = PostForm()
     return render(request, 'komunitipage/community_edit.html', {'post': posts})
 
-def search(request):
-    """if request.method == 'GET':  # If the form is submitted
+"""def search(request):
+    if request.method == 'GET':  # If the form is submitted
         search_query = request.GET.get('search_community', None)
 
         if search_query != None:
@@ -31,5 +31,5 @@ def search(request):
             communities = Community.objects.annotate(number_of_communities=Count('Community'))
             communities = sorted(communities, key=operator.attrgetter('number_of_communities'), reverse=True)
         return 0;
-        community = get_object_or_404(Community, title='Com2')"""
-    return render(request,"komunitipage/search_results.html",{})
+        community = get_object_or_404(Community, title='Com2')
+    return render(request,"komunitipage/search_results.html",{})"""
