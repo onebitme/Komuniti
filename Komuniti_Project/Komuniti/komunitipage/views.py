@@ -1,35 +1,51 @@
-from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm
-from django.views.generic import ListView
-
 from .models import *
-import operator
 
 
 def home(request):
-    community = get_object_or_404(Community,title='Com1')
-    return render(request, 'komunitipage/home.html', {'com':community})
+    return render(request, 'komunitipage/home.html') #,{'com':community})
 def hello():
     return HttpResponse("Hello Bu Sadece bir HTTP Response")
+
 def communities(request):
-    return render(request, 'komunitipage/communities.html', {'com': communities})
 
-def post_new(request):
-    posts = PostForm()
-    return render(request, 'komunitipage/community_edit.html', {'post': posts})
-
-"""def search(request):
     if request.method == 'GET':  # If the form is submitted
-        search_query = request.GET.get('search_community', None)
+        search_query = request.GET.get('search_post', None)
 
         if search_query != None:
-            communities = Community.objects.filter(title__icontains=search_query).annotate(
-                number_of_communities=Count('Community'))
+            posts = Post.objects.filter(title__icontains=search_query)
         else:
-            communities = Community.objects.annotate(number_of_communities=Count('Community'))
-            communities = sorted(communities, key=operator.attrgetter('number_of_communities'), reverse=True)
-        return 0;
-        community = get_object_or_404(Community, title='Com2')
-    return render(request,"komunitipage/search_results.html",{})"""
+            posts = None
+
+
+    return render(request, 'komunitipage/communities.html', {'com': communities,'posts':posts})
+
+def post_new(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        form.save()
+    else:
+        form = PostForm()
+    return render(request, 'komunitipage/community_edit.html', {'post': form})
+
+def new_datatype(request):
+    return 0
+
+def post_search(request):
+    #query = request.GET.get('search_post')
+    template = 'komunitipage/home.html'
+    #post = Post.objects.filter(title__icontains=query)
+
+
+    if request.method == 'GET':  # If the form is submitted
+        search_query = request.GET.get('search_post', None)
+
+        if search_query != None:
+            posts = Post.objects.filter(title__icontains=search_query)
+        else:
+            posts = Post.objects.all()
+
+
+    return render(request,template, {'posts':posts})

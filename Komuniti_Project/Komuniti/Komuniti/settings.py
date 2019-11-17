@@ -38,12 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'komunitipage.apps.KomunitipageConfig',
+    #'django_jsonforms'
+    'rest_framework',
 ]
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'komuniti',
+        'NAME': 'komuniti2',
         'USER': 'kommy',
         'PASSWORD': '12345',
         'HOST':'localhost',

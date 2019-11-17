@@ -8,7 +8,8 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('communities', views.communities, name='communities'),
     path('hello', views.hello, name='hello'),
-    path('community_edit', views.post_new, name='post_new')
+    path('community_edit', views.post_new, name='post_add'),
+    path('community_search', views.post_search, name='post_search')
     ##path('search/', views.SearchResultsView, name='search_results'),
     ##path('seach_results',views.seach, name='search')
 ]
