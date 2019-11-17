@@ -30,8 +30,6 @@ def post_new(request):
         form = PostForm()
     return render(request, 'komunitipage/community_edit.html', {'post': form})
 
-def new_datatype(request):
-    return 0
 
 def post_search(request):
     #query = request.GET.get('search_post')
