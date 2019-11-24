@@ -1,0 +1,14 @@
+<head>
+<script src="jquery-3.4.1.min.js"></script>
+</head>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<form id="some_form"  method="post">
+     {% csrf_token %}
+     {{ form.media }}
+     {{ form }}
+     <button type="submit">submit</button>
+</form>
+
+<!--<&#45;&#45;action="{% url 'home' %}"-->

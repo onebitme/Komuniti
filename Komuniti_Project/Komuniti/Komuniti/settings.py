@@ -40,13 +40,23 @@ INSTALLED_APPS = [
     'komunitipage.apps.KomunitipageConfig',
     #'django_jsonforms'
     'rest_framework',
+    'djangojsonschema',
+    'django.contrib.postgres',
+    'django_extensions',
+    'django_jsonforms',
+    'jquery',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'komuniti2',
-        'USER': 'kommy',
+        'NAME': 'komuniti',
+        'USER': 'ersunsozen',
         'PASSWORD': '12345',
         'HOST':'localhost',
         'PORT':'5432'
