@@ -38,13 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'komunitipage.apps.KomunitipageConfig',
-    #'django_jsonforms'
+    'django_jsonforms',
     'rest_framework',
     'djangojsonschema',
     'django.contrib.postgres',
     'django_extensions',
-    'django_jsonforms',
     'jquery',
+    'splitjson',
 ]
 
 REST_FRAMEWORK = {

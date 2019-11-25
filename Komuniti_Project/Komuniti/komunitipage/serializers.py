@@ -1,14 +1,8 @@
-from django.contrib.auth.models import User, Group
-from rest_framework import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 
+class LazyEncoder(DjangoJSONEncoder):
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
-
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
+    def default(self, obj):
+        if isinstance(obj): #, YourCustomType):
+            return str(obj)
+        return super().default(obj)
