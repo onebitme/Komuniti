@@ -121,37 +121,33 @@ def show_datatype(request):
 
     community = get_object_or_404(Community, title='Book Lovers')
     query_list = list(DataType.objects.values())
-    # print(query_list)
+    print('-*-*-*-*-*-*-*-*-*')
+    print(query_list)
+    print('-*-*-*-*-*-*-*-*-*')
 
     i = 0
-    f = {}
-    f['fields'] = []
+    data_types = {}
+    data_types['data_field'] = []
+    data_types['names'] =[]
 
 
     for key in query_list:
         print(key['name'])
-        f['fields'].append(key['name'])
+        data_types['names'].append(key['name'])
+        data_types['data_field'].append(key['data_field'])
         print('-*-*-*-*-*-*-*-*-*')
 
-        # extra_field_data=extra_field_data(key)
 
-    print(f)
-    # print(extra_field_data)
-    # query_dict = dict(DataType.objects.values())
-    # print(query_set)
-    # datatypejson = serializers.serialize('json', query_set)
-    # datatypejson = query_set
-    # datatypejson = datatypejson[1:]
-    # datatypejson = datatypejson[:-1]
+    print(data_types)
 
-    # query_list = json.loads(query_list)
 
-    # context={ 'community' : community,
-    #          'data_field' : data_field,
-    #          'fields' : fields
-    # }
+    context={ 'community' : community,
+              'names' : data_types['names'],
+              'fields' : data_types['data_field']
+     }
 
-    return render(request, 'komunitipage/show_datatype.html', {'form_2': key['name']})
+    print(request.POST)
+    return render(request, 'komunitipage/show_datatype.html', {'form_2': context})
 
 
 def community_edit(request):

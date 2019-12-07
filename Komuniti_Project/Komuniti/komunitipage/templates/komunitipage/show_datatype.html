@@ -2,12 +2,74 @@
 {% block deneme %}
 {% load staticfiles %}
 
+<h1> Create a new post according to the Community Data Types</h1>
 
-<form id="some_form"  method="post">
-     <p>{% csrf_token %}
-     <br>{{ form_2.media }}
-     {{ form_2 }}
-     </p>
+<form id="post_form" method="POST">
+    <p>{% csrf_token %}
+    {% for names in  form_2.names%}
+
+    <p>{{names}}</p>
+
+    {% endfor %}
+
+    {% for fields in form_2.fields %}
+    <p>
+        {% if fields == "String"%}
+        <textarea class="form-control" id="{{names}}" placeholder="Enter {{names}}" rows="5"
+                  name="{{names}}"></textarea>
+
+        {% elif fields == "Integer"%}
+        <input type="number" class="form-control" id="{{field.name}}" aria-describedby="{{field.name}}"
+               placeholder="Enter {{field.name}}" name="{{field.name}}">
+
+        {% elif fields == "Date"%}
+        <input type="date" class="form-control" id="{{field.name}}" aria-describedby="{{field.name}}"
+               placeholder="Enter {{field.name}}" name="{{field.name}}">
+        {% elif fields == "Time"%}
+        <input type="time" class="form-control" id="{{field.name}}" aria-describedby="{{field.name}}"
+               placeholder="Enter {{field.name}}" name="{{field.name}}">
+<!--        {% elif fields == "Image"%}
+    <div class="input-group">
+        <div class="form-control">
+            <input type="file" accept=".jpg,.gif,.png" class="custom-file-input" id="{{field.name}}"
+                   aria-describedby="{{field.name}}" name="{{field.name}}">
+            <label class="custom-file-label" for="inputGroupFile01">Choose file. Only jpg, png, and gif files
+                can be uploaded.</label>
+        </div>
+    </div>
+    {% elif fields == "Location"%}
+    <div>
+        <p>Click the button to get your coordinates.</p>
+
+        <button onclick="getLocation()" action="showPosition()">Try It</button>
+
+        <p><strong>Note:</strong> The geolocation property is not supported in IE8 and earlier versions.</p>
+        <p id="demo"></p>
+        <script>
+            var x = document.getElementById("demo");
+
+            function getLocation() {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+              } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+              }
+            }
+
+            function showPosition(position) {
+              x.innerHTML = "Latitude: " + position.coords.latitude +
+              "<br>Longitude: " + position.coords.longitude;
+            }
+        </script>
+    </div>-->
+    {% endif %}
+
+    </p>
+        {% endfor %}
+    </p>
+    <button type="submit">Post</button>
 </form>
+
 {% endblock %}
+
 

@@ -16,7 +16,7 @@ data_type_schema = {
         },
         "Data Field Type": {
             "type": "string",
-            "enum": ["String", "Integer", "Boolean", "Image"]
+            "enum": ["String", "Integer", "Boolean", "Image", "Date", "Time","Enum","Location"]
         },
         "is required": {
             "type": "string",
@@ -26,7 +26,6 @@ data_type_schema = {
 
     }
 }
-# data_type_schema = {}
 options = {"no_additional_properties": True}
 
 

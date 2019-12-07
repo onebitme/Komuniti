@@ -1,5 +1,16 @@
 <html lang="en">
 {% load static %}
+
+<!--<head>
+    &lt;!&ndash;    Load Bootstrap via CDN &ndash;&gt;
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>-->
+
 <header>
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
@@ -30,7 +41,7 @@
     <form>
         <a href="{% url 'add_datatype' %}" class="btn btn-secondary my-2">Add Datatype</a>
     </form>
-        {% block content %}
+        {% block naber %}
         {%endblock%}
 
 </div>

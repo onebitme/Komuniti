@@ -1,16 +1,18 @@
 {% extends 'komunitipage/create_community.html' %}
-{% block content %}
+{% block naber %}
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <form id="some_form"  method="post">
+     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
      <p>{% csrf_token %}
-     <br>{{ form.media }}
-     {{ form.as_ul }}
+          <br>{{ form.media }}
+     <p></p>
+     {{ form.as_table }}
      </p>
      <button type="submit">Create</button>
 </form>
+
 {% endblock %}
-<!--<&#45;&#45;action="{% url 'home' %}"-->
