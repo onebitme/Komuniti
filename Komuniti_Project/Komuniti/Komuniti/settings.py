@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'jquery',
     'splitjson',
+    'qwikidata',
 ]
 
 REST_FRAMEWORK = {
@@ -73,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'Komuniti.urls'

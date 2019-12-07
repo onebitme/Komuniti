@@ -1,14 +1,16 @@
+{% extends 'komunitipage/create_community.html' %}
+{% block content %}
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <form id="some_form"  method="post">
-     {% csrf_token %}
-     {{ form.media }}
-     {{ form }}
+     <p>{% csrf_token %}
+     <br>{{ form.media }}
+     {{ form.as_ul }}
+     </p>
      <button type="submit">Create</button>
 </form>
-
+{% endblock %}
 <!--<&#45;&#45;action="{% url 'home' %}"-->

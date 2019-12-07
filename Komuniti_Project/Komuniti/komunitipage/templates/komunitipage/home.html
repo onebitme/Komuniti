@@ -41,7 +41,7 @@
 <header>
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
-            <a href="#" class="navbar-brand d-flex align-items-center">
+            <a href="{% url 'home' %}" action= class="navbar-brand d-flex align-items-center">
                 <strong>KOMUNITI</strong>
             </a>
         </div>
@@ -62,7 +62,10 @@
             </form>
             <!-- add form -->
             <form>
-                <a href="{% url 'post_add' %}" class="btn btn-secondary my-2">Come Join Uss</a>
+                <a href="{% url 'post_add' %}" class="btn btn-secondary my-2">post_add</a>
+            </form>
+            <form>
+                <a href="{% url 'komunitipage/newCommunity' %}" class="btn btn-secondary my-2">Create New Community</a>
             </form>
 
         </div>
@@ -101,8 +104,9 @@
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+
             </div>
+                {% endfor %}
         </div>
     </div>
 
