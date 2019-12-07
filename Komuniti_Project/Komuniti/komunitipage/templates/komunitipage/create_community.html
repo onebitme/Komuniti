@@ -1,0 +1,50 @@
+<html lang="en">
+{% load static %}
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>CREATE KOMUNITI</strong>
+            </a>
+        </div>
+    </div>
+</header>
+<body>
+
+<form id="community_form" method="post">
+    <p>
+        <input class="form-control form-control-lg" type="text" placeholder="Community Name">
+        <input class="form-control" type="text" placeholder="Community Description">
+        <button type="submit">Create</button>
+</form>
+<input class="form-control form-control-sm" type="text" placeholder="Wikidata Placeholder">
+<button type="submit">Add Wikidata</button>
+</p>
+<div>
+    <form>
+        <a href="{% url 'show_datatype' %}" class="btn btn-secondary my-2">Show Datatype</a>
+    </form>
+        {% block deneme %}
+        {%endblock%}
+
+    <form>
+        <a href="{% url 'add_datatype' %}" class="btn btn-secondary my-2">Add Datatype</a>
+    </form>
+        {% block content %}
+        {%endblock%}
+
+</div>
+
+<div class="full-width-container" style="margin-top:85px;margin-bottom: 90px">
+
+</div>
+
+<div class="full-width-container" style="margin-top:85px;margin-bottom: 90px">
+
+</div>
+
+
+
+</body>
+</html>
+

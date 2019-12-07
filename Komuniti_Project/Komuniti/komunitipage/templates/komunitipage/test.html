@@ -1,0 +1,13 @@
+{% extends 'komunitipage/create_community.html' %}
+{% block tot %}
+{% load staticfiles %}
+<div>
+<form id="some_form"  method="post">
+     <p>{% csrf_token %}
+     <br>{{ form_2.media }}
+     {{ form_2 }}
+     </p>
+</form>
+</div>
+
+{% endblock %}
