@@ -1,3 +1,6 @@
+import random
+import string
+
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
@@ -99,55 +102,71 @@ def add_datatype(request):
     return render(request, 'komunitipage/add_datatype.html', {'form': CustomForm})
 
 
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
+
+
 def show_datatype(request):
-    '''community = Community.objects.get(title='Book Lovers')
-    data_type = DataType(name=)
-    # datatype = "{"
-    #
-    # for k in DataType.objects.filter(community=community):
-    #     print(k)
-    #     #datatype += serializers.serialize('json',data_field)
-    #     #print(datatype)
-    # print(datatype)
+        context = {}
+        community = get_object_or_404(Community, title='Book Lovers')
+        query_list = list(DataType.objects.values())
+        '''print('-*-*-*-*-*-*-*-*-*')
+        print(query_list)
+        print('-*-*-*-*-*-*-*-*-*')'''
+
+        post = Post(title=randomString(10), community=community, post_data={})
+        #field_list = post.post_data
+        data_types = {}
+        data_types['names'] = []
+        data_types['field_type'] = []
+
+        f = {}
+        f['fields'] = []
+
+        for key in query_list:
+            # print(key['name'])
+            data_types['names'].append(key['name'])
+            data_types['field_type'].append(key['data_field'])
+            # print('-*-*-*-*-*-*-*-*-*')
+
+        '''context = {'community': community,
+                'names': data_names,
+                'fields': data_fields
+                }'''
 
 
-    # community = Community.objects.get(title='Book Lovers')
-    # query = DataType.objects.filter(community=community)
-    # datatypejson = serializers.serialize('json', query)
-    # datatypejson = datatypejson[1:]
-    # datatypejson = datatypejson[:-1]
-    # datatypejson = json.dumps(datatypejson)
-    # print(datatypejson)'''
 
-    community = get_object_or_404(Community, title='Book Lovers')
-    query_list = list(DataType.objects.values())
-    print('-*-*-*-*-*-*-*-*-*')
-    print(query_list)
-    print('-*-*-*-*-*-*-*-*-*')
+        for key in range(len(data_types['names'])):
+            field_name = data_types['names'][key].strip()
+            field_type = data_types['field_type'][key]
+            f['fields'].append({
+                "name": field_name,
+                "field_type":field_type
+            })
 
-    i = 0
-    data_types = {}
-    data_types['data_field'] = []
-    data_types['names'] =[]
-
-
-    for key in query_list:
-        print(key['name'])
-        data_types['names'].append(key['name'])
-        data_types['data_field'].append(key['data_field'])
-        print('-*-*-*-*-*-*-*-*-*')
+        print(f)
+        if request.method == "POST":
+            print(request.POST)
+            query = request.GET.get
+        else:
+            print(1111)
+        #print(context)
+        #post.post_data = data_types
+        #post.save()
 
 
-    print(data_types)
+        return render(request, 'komunitipage/show_datatype.html', {'form_2':f})
 
 
-    context={ 'community' : community,
-              'names' : data_types['names'],
-              'fields' : data_types['data_field']
-     }
+'''def save_post(request):
+    if request.method == "POST":
+        print(request.POST)
+    
+    
+    return render(request, 'komunitipage/save_datatype.html')'''
 
-    print(request.POST)
-    return render(request, 'komunitipage/show_datatype.html', {'form_2': context})
 
 
 def community_edit(request):
@@ -208,43 +227,3 @@ def new_community(request):
         return redirect("/")
     else:
         return render(request, "komunitipage/newCommunity.html", {})
-
-
-# TODO: BURANIN ALTI FENA----- BUNLARI TEK TEK ELDEN GEÇİR
-@csrf_exempt
-def tags(request):
-    query = request.POST.get("query", "")
-    data = WikidataService.query(query)
-    return JsonResponse(data, safe=False)
-
-
-# TODO: ÇALIŞMIYOR
-def searchTag_view(request):
-    txtSRC = request.GET.get('search_text')
-    SEARCHPAGE = txtSRC
-    PARAMS = {
-        "action": "query",
-        "format": "json",
-        "list": "search",
-        "srsearch": SEARCHPAGE
-    }
-    Srch = requests.Session()
-    URL = "https://en.wikipedia.org/w/api.php"
-    Res = Srch.get(url=URL, params=PARAMS)
-    DATA = Res.json()['query']['search']
-    titles = ""
-    for tt in DATA:
-        titles += "#" + tt['title']
-    return render(request, 'komunitipage/tagSearch.html', {'form': titles})
-
-
-def CreateCommunity_view(request):
-    form = AddCommunity(request.POST, request.FILES)
-    comm = Community
-    comm.title = request.POST.get("Community_Name")
-    comm.description = request.POST.get("Community_Description")
-
-    community_tag = CommunityTag()
-    comm.communityTags = request.POST.get("Community_Tags")
-
-    return render(request, 'komunitipage/CreateCommunity.html', {'form': form}, )
