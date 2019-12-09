@@ -74,7 +74,7 @@ def community_search(request):
     print(communities + '1')
     return render(request, template, {'community': community})
 
-
+#TODO: Bunun enum desteklemesi gerekiyor
 def add_datatype(request):
     if request.method == "POST":
         query = CustomForm(request.POST)
@@ -101,23 +101,20 @@ def add_datatype(request):
 
     return render(request, 'komunitipage/add_datatype.html', {'form': CustomForm})
 
-
+#TODO: Postlar için random isimler alıyorsun.
 def randomString(stringLength=10):
     """Generate a random string of fixed length """
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
-
+#TODO: Bunun adı artık Show_datatype olmasın da sanki post diye değiştirilsin
+#TODO: Kaydettiğin format herhangi bir JSON falan uyuyor mu baksana
 def show_datatype(request):
-        context = {}
+
         community = get_object_or_404(Community, title='Book Lovers')
         query_list = list(DataType.objects.values())
-        '''print('-*-*-*-*-*-*-*-*-*')
-        print(query_list)
-        print('-*-*-*-*-*-*-*-*-*')'''
 
-        post = Post(title=randomString(10), community=community, post_data={})
-        #field_list = post.post_data
+
         data_types = {}
         data_types['names'] = []
         data_types['field_type'] = []
@@ -141,17 +138,38 @@ def show_datatype(request):
         for key in range(len(data_types['names'])):
             field_name = data_types['names'][key].strip()
             field_type = data_types['field_type'][key]
-            f['fields'].append({
+            f['fields'].append(
+                {
                 "name": field_name,
                 "field_type":field_type
-            })
+            }
+            )
 
-        print(f)
+        post_json = {}
+        post_json['names'] = []
+        post_json['values'] = []
+        #print(f)
         if request.method == "POST":
-            print(request.POST)
-            query = request.GET.get
+            #print(request.POST)
+            query = request.POST
+            print(query)
+
+            _mutable = query._mutable
+            query._mutable = True
+            del query['csrfmiddlewaretoken']
+            query._mutable=_mutable
+
+            for key,value in query.items():
+                print(key,value)
+                post_json['values'].append(value)
+                post_json['names'].append(key)
+                print(post_json)
         else:
             print(1111)
+
+        post_object = Post(community=community,title=randomString(10),description='Deneme_1',post_data=post_json)
+
+        post_object.save()
         #print(context)
         #post.post_data = data_types
         #post.save()
@@ -216,7 +234,7 @@ def new_community(request):
         # community.post_type = request.POST.get("com_post", "")
         community.save()
         # return HttpResponse(cmn.pk)
-
+        #TODO: bunun burasını kullan sadece sanırım :S
         tagsJson = request.POST.get('tagsJson')
         community_tag = CommunityTag()
         community_tag.community = community

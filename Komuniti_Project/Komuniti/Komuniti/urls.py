@@ -19,8 +19,8 @@ urlpatterns = [
     path('create_community',views.create_community, name='create_community'),
     path('test_2',views.show_datatype, name='komunitipage/test_2'),
     path('newCommunity',views.new_community, name='komunitipage/newCommunity'),
-    path('tagSearch',views.searchTag_view, name='komunitipage/tagSearch'),
-    path('CreateCommunity/', views.CreateCommunity_view, name="CreateCommunity"),
+    #path('tagSearch',views.searchTag_view, name='komunitipage/tagSearch'),
+    #path('CreateCommunity/', views.CreateCommunity_view, name="CreateCommunity"),
 
     #path('test', views.show_names, name='test'),
     ##path('search/', views.SearchResultsView, name='search_results'),
