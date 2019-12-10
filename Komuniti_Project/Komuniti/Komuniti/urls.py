@@ -17,12 +17,7 @@ urlpatterns = [
     path('add_datatype',views.add_datatype, name='add_datatype'),
     path('show_datatype', views.show_datatype, name='show_datatype'),
     path('create_community',views.create_community, name='create_community'),
-    path('test_2',views.show_datatype, name='komunitipage/test_2'),
     path('newCommunity',views.new_community, name='komunitipage/newCommunity'),
-    #path('tagSearch',views.searchTag_view, name='komunitipage/tagSearch'),
-    #path('CreateCommunity/', views.CreateCommunity_view, name="CreateCommunity"),
+    path('view_community/<int:communityId>',views.view_community, name='view_community')
 
-    #path('test', views.show_names, name='test'),
-    ##path('search/', views.SearchResultsView, name='search_results'),
-    ##path('seach_results',views.seach, name='search')
 ]

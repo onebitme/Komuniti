@@ -1,3 +1,4 @@
+import datetime
 import random
 import string
 
@@ -128,16 +129,12 @@ def show_datatype(request):
             data_types['field_type'].append(key['data_field'])
             # print('-*-*-*-*-*-*-*-*-*')
 
-        '''context = {'community': community,
-                'names': data_names,
-                'fields': data_fields
-                }'''
-
-
-
         for key in range(len(data_types['names'])):
             field_name = data_types['names'][key].strip()
             field_type = data_types['field_type'][key]
+            print(field_type)
+            print("------")
+            print(field_name)
             f['fields'].append(
                 {
                 "name": field_name,
@@ -157,7 +154,7 @@ def show_datatype(request):
             _mutable = query._mutable
             query._mutable = True
             del query['csrfmiddlewaretoken']
-            query._mutable=_mutable
+            query._mutable= False
 
             for key,value in query.items():
                 print(key,value)
@@ -178,14 +175,10 @@ def show_datatype(request):
         return render(request, 'komunitipage/show_datatype.html', {'form_2':f})
 
 
-'''def save_post(request):
-    if request.method == "POST":
-        print(request.POST)
-    
-    
-    return render(request, 'komunitipage/save_datatype.html')'''
-
-
+#TODO: Postların gelmesi
+def view_community(request, communityId):
+    Community_detail = get_object_or_404(Community,id=communityId)
+    return render(request,'komunitipage/view_community.html', {'community': Community_detail})
 
 def community_edit(request):
     com = Community.objects.get(title='Firefaytırs')
@@ -218,30 +211,29 @@ def upload_pic(request):
 
 
 def create_community(request):
+    community = Community()
     if request.method == "POST":
-        community = Community
-        community.title = request.POST.get("")
-    return render(request, 'komunitipage/create_community.html')
-
-
-# TODO: Not OK
-@csrf_exempt
-def new_community(request):
-    if request.method == "POST":
-        community = Community()
-        community.title = request.POST.get("com_name", "")
-        community.description = request.POST.get("com_description", "")
-        # community.post_type = request.POST.get("com_post", "")
-        community.save()
-        # return HttpResponse(cmn.pk)
-        #TODO: bunun burasını kullan sadece sanırım :S
-        tagsJson = request.POST.get('tagsJson')
-        community_tag = CommunityTag()
-        community_tag.community = community
-        community_tag.tag_info = tagsJson
-        community_tag.save()
+        query = request.POST
+        print(query)
+        print("*******0000********")
+        ######
+        #tagsJson = request.POST.get('tagsJson')
+        #community_tag = CommunityTag()
+        ##community_tag.community = community
+        #community_tag.tag_info = tagsJson
+        #community_tag.save()
         # deneme = WikidataService.query()
         # print(deneme)
+        community.title=query['community_title']
+        community.description = query['community_description']
+        community.tags = {"":""}
+        community.date_pub = datetime.datetime.now()
+        print(community.title + "*****" + community.description)
+        community.save()
+
         return redirect("/")
     else:
-        return render(request, "komunitipage/newCommunity.html", {})
+        return render(request, "komunitipage/create_community.html", {})
+
+    return render(request, 'komunitipage/create_community.html')
+

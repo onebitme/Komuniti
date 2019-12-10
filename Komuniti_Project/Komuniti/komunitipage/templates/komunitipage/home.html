@@ -41,7 +41,7 @@
 <header>
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container d-flex justify-content-between">
-            <a href="{% url 'home' %}" action= class="navbar-brand d-flex align-items-center">
+            <a href="{% url 'home' %}" action="" class="navbar-brand d-flex align-items-center">
                 <strong>KOMUNITI</strong>
             </a>
         </div>
@@ -62,10 +62,10 @@
             </form>
             <!-- add form -->
             <form>
-                <a href="{% url 'post_add' %}" class="btn btn-secondary my-2">post_add</a>
+                <a href="{% url 'post_add' %}" class="btn btn-secondary my-2">Search</a>
             </form>
             <form>
-                <a href="{% url 'komunitipage/newCommunity' %}" class="btn btn-secondary my-2">Create New Community</a>
+                <a href="{% url 'create_community' %}" class="btn btn-secondary my-2">Create New Community</a>
             </form>
 
         </div>
@@ -79,9 +79,6 @@
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
                         <div class="text-center">
-                            {% load static %}
-                            <img src="/komunitipage/static/flamingo.jpg">
-                        </div>
                         <div class="card-body">
 
                             <p class="card-text">
@@ -97,18 +94,18 @@
 
                             </p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                </div>
-                                <small class="text-muted">9 mins</small>
-
+                                <form>
+                                    <a href="{% url 'view_community' Community.id  %}" class="btn btn-secondary my-2">View : {{Community.title}} </a>
+                                </form>
                             </div>
+                            <small class="text-muted">{{Community.date_pub}}</small>
                         </div>
                     </div>
                 </div>
 
             </div>
-                {% endfor %}
+            {% endfor %}
+        </div>
         </div>
     </div>
 
