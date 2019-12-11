@@ -145,6 +145,7 @@ def show_datatype(request):
         post_json = {}
         post_json['names'] = []
         post_json['values'] = []
+        post_json['field_types'] = data_types['field_type']
         #print(f)
         if request.method == "POST":
             #print(request.POST)
@@ -161,12 +162,16 @@ def show_datatype(request):
                 post_json['values'].append(value)
                 post_json['names'].append(key)
                 print(post_json)
+
+            post_object = Post(community=community, post_data=post_json)
+            post_object.save()
+
+
         else:
             print(1111)
 
-        post_object = Post(community=community,title=randomString(10),description='Deneme_1',post_data=post_json)
 
-        post_object.save()
+
         #print(context)
         #post.post_data = data_types
         #post.save()
@@ -175,10 +180,46 @@ def show_datatype(request):
         return render(request, 'komunitipage/show_datatype.html', {'form_2':f})
 
 
-#TODO: Postların gelmesi
+#TODO: Postlar Geliyor, Ama Value'su ne falan, formun içinde eksik
 def view_community(request, communityId):
     Community_detail = get_object_or_404(Community,id=communityId)
-    return render(request,'komunitipage/view_community.html', {'community': Community_detail})
+    query = Post.objects.filter(community = Community_detail)
+    post_list = list()
+
+    for post in query:
+        post_list.append(post)
+
+    print(post_list[0].post_data['names'])
+    print(post_list[0].post_data['values'])
+#####################################################
+    data_types = {}
+    data_types['names'] = []
+    data_types['values'] = []
+
+    f = {}
+    f['fields'] = []
+
+    for key in post_list:
+        # print(key['name'])
+        data_types['names'].append(key.post_data['names'])
+        data_types['values'].append(key.post_data['values'])
+        print('-*-*-*-*-*-*-*-*-*')
+
+    print(json.dumps(data_types))
+
+    for key in range(len(data_types['names'])):
+        field_name = data_types['names'][key]
+        field_value = data_types['values'][key]
+        f['fields'].append(
+            {
+                "name": field_name,
+                "value": field_value
+            }
+        )
+
+    #print(f)
+
+    return render(request,'komunitipage/view_community.html', {'community': Community_detail,'post_list':f})
 
 def community_edit(request):
     com = Community.objects.get(title='Firefaytırs')
@@ -198,7 +239,7 @@ def community_edit(request):
     print(extra_field_data)
     return render(request, 'komunitipage/community_edit.html')
 
-
+#TODO: Does not Upload.
 def upload_pic(request):
     if request.method == 'POST':
         form = ImageUploadForm(request.POST, request.FILES)
@@ -209,7 +250,7 @@ def upload_pic(request):
             return HttpResponse('image upload success')
     return HttpResponseForbidden('allowed only via POST')
 
-
+#TODO: TAG YOK
 def create_community(request):
     community = Community()
     if request.method == "POST":

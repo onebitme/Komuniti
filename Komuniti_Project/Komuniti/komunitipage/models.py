@@ -67,8 +67,8 @@ class DataType(models.Model):
 
 class Post(models.Model):
     community = models.ForeignKey(Community, models.PROTECT)
-    title = models.CharField(max_length=120, unique=True)
-    description = models.TextField(blank=True)
+    #title = models.CharField(max_length=120, unique=True)
+    #description = models.TextField(blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     # data_field = models.ForeignKey(DataField,on_delete=models.CASCADE, default=1)
@@ -79,8 +79,9 @@ class Post(models.Model):
 
     # extra_fields = HStoreField(db_index=True)
 
-    def __str__(self):
-        return self.title
+
+#def __str__(self):
+#        return self.title
     # image = models.ImageField()
 
 

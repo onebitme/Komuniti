@@ -48,5 +48,39 @@
 
     <div class="post">
         <h1>{{ community.title }}</h1>
+         <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+               {% for post in post_list.fields %}
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="text-center">
+                        <div class="card-body">
+
+                            <p class="card-text">
+
+                                <tr>
+                                    <td>{{ post.name}}</td>
+                                </tr>
+                            </p>
+                            <p>
+                                <tr>
+                                    <td>{{ post.value}}</td>
+                                </tr>
+
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
     </div>
 </html>
+
+
+

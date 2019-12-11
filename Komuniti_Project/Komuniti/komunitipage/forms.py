@@ -32,7 +32,7 @@ options = {"no_additional_properties": True}
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'description', 'user', 'community', 'post_data')
+        fields = ('user', 'community', 'post_data')
 
 
 # class CustomForm(Form):
