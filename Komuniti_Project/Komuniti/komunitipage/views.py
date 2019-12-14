@@ -108,11 +108,10 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
-#TODO: Bunun adı artık Show_datatype olmasın da sanki post diye değiştirilsin
 #TODO: Kaydettiğin format herhangi bir JSON falan uyuyor mu baksana
-def show_datatype(request):
+def add_post(request, communityId):
 
-        community = get_object_or_404(Community, title='Book Lovers')
+        community = get_object_or_404(Community, id=communityId)
         query_list = list(DataType.objects.values())
 
 
@@ -158,19 +157,19 @@ def show_datatype(request):
             query._mutable = True
             del query['csrfmiddlewaretoken']
             query._mutable= False
-            i=0;
-
+            pk_rand= random.randint(0,2800);
+            i=0
+            post_object = Post(community=community, post_data=post_json, pk=pk_rand)
             for key,value in query.items():
                 print(key,value)
                 post_json['fields'].append({
                     "data_names": key,
                     "values": value,
-                    "data_type": data_types['field_type'][i]
+                    "data_type": data_types['field_type'][i],
+                    "post_id" : post_object.pk
                 })
                 i +=1
 
-
-            post_object = Post(community=community, post_data=post_json)
             post_object.save()
 
         else:
@@ -183,7 +182,74 @@ def show_datatype(request):
         #post.save()
 
 
-        return render(request, 'komunitipage/show_datatype.html', {'form_2':f})
+        return render(request, 'komunitipage/add_post.html', {'form_2':f})
+
+
+def show_datatype(request):
+    community = get_object_or_404(Community, title='Book Lovers')
+    query_list = list(DataType.objects.values())
+
+    data_types = {}
+    data_types['names'] = []
+    data_types['field_type'] = []
+
+    f = {}
+    f['fields'] = []
+
+    for key in query_list:
+        # print(key['name'])
+        data_types['names'].append(key['name'])
+        data_types['field_type'].append(key['data_field'])
+        # print('-*-*-*-*-*-*-*-*-*')
+
+    for key in range(len(data_types['names'])):
+        field_name = data_types['names'][key].strip()
+        field_type = data_types['field_type'][key]
+        print(field_type)
+        print("------")
+        print(field_name)
+        f['fields'].append(
+            {
+                "name": field_name,
+                "field_type": field_type
+            }
+        )
+
+    post_json = {}
+    post_json['fields'] = []
+
+    if request.method == "POST":
+        # print(request.POST)
+        query = request.POST
+        print(query)
+
+        _mutable = query._mutable
+        query._mutable = True
+        del query['csrfmiddlewaretoken']
+        query._mutable = False
+        pk_rand = random.randint(0, 2800);
+        i = 0
+        post_object = Post(community=community, post_data=post_json, pk=pk_rand)
+        for key, value in query.items():
+            print(key, value)
+            post_json['fields'].append({
+                "data_names": key,
+                "values": value,
+                "data_type": data_types['field_type'][i],
+                "post_id": post_object.pk
+            })
+            i += 1
+
+        post_object.save()
+
+    else:
+        print(1111)
+
+    # print(context)
+    # post.post_data = data_types
+    # post.save()
+
+    return render(request, 'komunitipage/show_datatype.html', {'form_2': f})
 
 
 #TODO: Postlar Geliyor, Ama Value'su ne falan, formun içinde eksik
@@ -198,14 +264,16 @@ def view_community(request, communityId):
 #####################################################
     another_f = {}
     another_f['fields'] = []
+    id = 1
 
     for key in post_list:
-        print(key.post_data)
         another_f['fields'].append(
             {
                 "fields" : key.post_data['fields'],
+                "post_id": key.pk
             }
         )
+        id +=1
 
 
 ####################################
@@ -213,20 +281,27 @@ def view_community(request, communityId):
 
 
 
-    return render(request,'komunitipage/view_community.html', {'community': Community_detail, 'post':another_f})
+    return render(request,'komunitipage/view_community.html', {'community': Community_detail, 'post':another_f })
 
 
 def view_post(request, postId):
     post = Post.objects.get(id=postId)
     post_data = post.post_data
+    print(post_data)
+    print("*****----*****")
+    another_f = {}
+    another_f['fields'] = []
+    id = 1
 
-    print(post_data['names'][1])
+    for key in post_data:
+        another_f['fields'].append(
+            {
+                "fields": post_data['fields'],
+            }
+        )
+        id += 1
 
-    post_json = {}
-    post_json['names'] = []
-    post_json['values'] = []
-
-    return render(request,'komunitipage/view_post.html', {'post': post_data})
+    return render(request,'komunitipage/view_post.html', {'post': another_f})
 
 
 

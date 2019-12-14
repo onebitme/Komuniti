@@ -1,0 +1,44 @@
+{% extends 'komunitipage/view_community.html' %}
+{% block add_post %}
+{% load staticfiles %}
+
+<h1> Create a new post according to the Community Data Types</h1>
+
+<form id="post_form" method=post>
+    <p>{% csrf_token %}
+
+
+
+    {% for field in form_2.fields %}
+
+    <p>
+        {% if field.field_type == "String"%}
+        <p>{{field.name}}</p>
+        <textarea class="form-control"  rows="5" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name="{{field.name}}"></textarea>
+        {% elif field.field_type == "Integer"%}
+        <p>{{field.name}}</p>
+        <input type="number"  class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
+        {% elif field.field_type == "Date"%}
+        <p>{{field.name}}</p>
+        <input type="date" class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
+        {% elif field.field_type == "Time"%}
+        <p>{{field.name}}</p>
+        <input type="time" class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
+
+    {% endif %}
+
+    </p>
+    {% endfor %}
+    </p>
+    <button type="submit">Post</button>
+</form>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+
+
+{% endblock %}
+
+
