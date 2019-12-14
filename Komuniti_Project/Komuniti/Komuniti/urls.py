@@ -17,6 +17,6 @@ urlpatterns = [
     path('add_datatype',views.add_datatype, name='add_datatype'),
     path('show_datatype', views.show_datatype, name='show_datatype'),
     path('create_community',views.create_community, name='create_community'),
-    path('view_community/<int:communityId>',views.view_community, name='view_community')
-
+    path('view_community/<int:communityId>',views.view_community, name='view_community'),
+    path('view_post/<int:postId>',views.view_post, name='view_post')
 ]

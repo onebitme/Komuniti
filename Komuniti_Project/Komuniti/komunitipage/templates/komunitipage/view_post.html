@@ -1,0 +1,29 @@
+{% extends 'komunitipage/view_community.html' %}
+{% block post_view %}
+{% load staticfiles %}
+
+<div class="col-md-4">
+     <div class="card mb-4 shadow-sm">
+          <div class="text-center">
+               <div class="card-body">
+                    <p class="card-text">
+
+                         <tr>
+                              <td>{%for a in post.items%}</td>
+                                   {{ a.names }}
+                                   {% endfor %}
+                         </tr>
+                    </p>
+                    <p>
+                         <tr>
+                              <td>{{k.value}}</td>
+                         </tr>
+                    </p>
+               </div>
+          </div>
+     </div>
+</div>
+
+
+
+{% endblock %}

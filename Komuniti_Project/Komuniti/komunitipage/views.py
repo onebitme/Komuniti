@@ -143,10 +143,12 @@ def show_datatype(request):
             )
 
         post_json = {}
-        post_json['names'] = []
-        post_json['values'] = []
-        post_json['field_types'] = data_types['field_type']
+        #post_json['names'] = []
+        #post_json['values'] = []
+        #post_json['field_types'] = data_types['field_type']
+        post_json['fields']=[]
         #print(f)
+
         if request.method == "POST":
             #print(request.POST)
             query = request.POST
@@ -156,16 +158,20 @@ def show_datatype(request):
             query._mutable = True
             del query['csrfmiddlewaretoken']
             query._mutable= False
+            i=0;
 
             for key,value in query.items():
                 print(key,value)
-                post_json['values'].append(value)
-                post_json['names'].append(key)
-                print(post_json)
+                post_json['fields'].append({
+                    "data_names": key,
+                    "values": value,
+                    "data_type": data_types['field_type'][i]
+                })
+                i +=1
+
 
             post_object = Post(community=community, post_data=post_json)
             post_object.save()
-
 
         else:
             print(1111)
@@ -189,37 +195,40 @@ def view_community(request, communityId):
     for post in query:
         post_list.append(post)
 
-    print(post_list[0].post_data['names'])
-    print(post_list[0].post_data['values'])
 #####################################################
-    data_types = {}
-    data_types['names'] = []
-    data_types['values'] = []
-
-    f = {}
-    f['fields'] = []
+    another_f = {}
+    another_f['fields'] = []
 
     for key in post_list:
-        # print(key['name'])
-        data_types['names'].append(key.post_data['names'])
-        data_types['values'].append(key.post_data['values'])
-        print('-*-*-*-*-*-*-*-*-*')
-
-    print(json.dumps(data_types))
-
-    for key in range(len(data_types['names'])):
-        field_name = data_types['names'][key]
-        field_value = data_types['values'][key]
-        f['fields'].append(
+        print(key.post_data)
+        another_f['fields'].append(
             {
-                "name": field_name,
-                "value": field_value
+                "fields" : key.post_data['fields'],
             }
         )
 
-    #print(f)
 
-    return render(request,'komunitipage/view_community.html', {'community': Community_detail,'post_list':f})
+####################################
+
+
+
+
+    return render(request,'komunitipage/view_community.html', {'community': Community_detail, 'post':another_f})
+
+
+def view_post(request, postId):
+    post = Post.objects.get(id=postId)
+    post_data = post.post_data
+
+    print(post_data['names'][1])
+
+    post_json = {}
+    post_json['names'] = []
+    post_json['values'] = []
+
+    return render(request,'komunitipage/view_post.html', {'post': post_data})
+
+
 
 def community_edit(request):
     com = Community.objects.get(title='Firefaytırs')
