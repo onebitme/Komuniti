@@ -136,23 +136,23 @@ def add2Community(request ,communityId):
 
 
 def add_post(request, communityId):
-        #TODO: Burayı ilk iş çöz, bir communityye post ekleyemiyorsun!!!
         community = get_object_or_404(Community, id=communityId)
-        query_list = list(DataType.objects.values(id__icontains=communityId))
+        query = DataType.objects.filter(community=community)
 
         data_types = {}
         data_types['names'] = []
         data_types['field_type'] = []
 
+        print(query[1].community.pk)
+
+        for i in range(len(query)):
+            print(query[i].name)
+            data_types['names'].append(query[i].name)
+            data_types['field_type'].append(query[i].data_field)
+
+
         f = {}
         f['fields'] = []
-
-        for key in query_list:
-            data_types['names'].append(key['name'])
-            data_types['field_type'].append(key['data_field'])
-            #print('-*-*-*-*-*-*-*-*-*')
-
-        #print(data_types)
 
         for key in range(len(data_types['names'])):
             field_name = data_types['names'][key]#.strip()

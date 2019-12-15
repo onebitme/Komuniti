@@ -62,8 +62,10 @@ class DataType(models.Model):
 
     def __str__(self):
         return self.name
-
-
+    def __str__(self):
+        return self.data_field
+    def __int__(self):
+        return self.community
 
 class Post(models.Model):
     community = models.ForeignKey(Community, models.PROTECT)
