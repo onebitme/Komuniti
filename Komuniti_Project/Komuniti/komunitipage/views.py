@@ -108,12 +108,37 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
-#TODO: Kaydettiğin format herhangi bir JSON falan uyuyor mu baksana
+def add2Community(request ,communityId):
+    if request.method == "POST":
+        query = CustomForm(request.POST)
+        ##https://docs.djangoproject.com/en/2.2/ref/models/instances/
+        if query.is_valid():
+            print('--------------------------')
+            # With this line, it transforms the form from HTML to JsonSchema
+            cleaned_query = query.cleaned_data['data_type']
+            print(cleaned_query)
+            data_type_object = DataType()
+            community = Community.objects.get(id= communityId)
+            data_type_object.community = community
+            data_type_object.name = cleaned_query['Data Field Name']
+            data_type_object.data_field = cleaned_query['Data Field Type']
+            if cleaned_query['is required'] == "True":
+                data_type_object.is_required = True
+            else:
+                data_type_object.is_required = False
+            data_type_object.save()
+            print(data_type_object)
+
+        else:
+            print(11111111111111111111111)
+
+    return render(request, 'komunitipage/add2Community.html', {'form': CustomForm, 'comid':communityId})
+
+
 def add_post(request, communityId):
-
+        #TODO: Burayı ilk iş çöz, bir communityye post ekleyemiyorsun!!!
         community = get_object_or_404(Community, id=communityId)
-        query_list = list(DataType.objects.values())
-
+        query_list = list(DataType.objects.values(id__icontains=communityId))
 
         data_types = {}
         data_types['names'] = []
@@ -123,17 +148,18 @@ def add_post(request, communityId):
         f['fields'] = []
 
         for key in query_list:
-            # print(key['name'])
             data_types['names'].append(key['name'])
             data_types['field_type'].append(key['data_field'])
-            # print('-*-*-*-*-*-*-*-*-*')
+            #print('-*-*-*-*-*-*-*-*-*')
+
+        #print(data_types)
 
         for key in range(len(data_types['names'])):
-            field_name = data_types['names'][key].strip()
+            field_name = data_types['names'][key]#.strip()
             field_type = data_types['field_type'][key]
-            print(field_type)
-            print("------")
-            print(field_name)
+            #print(field_type)
+            #print("------")
+            #print(field_name)
             f['fields'].append(
                 {
                 "name": field_name,
@@ -175,14 +201,7 @@ def add_post(request, communityId):
         else:
             print(1111)
 
-
-
-        #print(context)
-        #post.post_data = data_types
-        #post.save()
-
-
-        return render(request, 'komunitipage/add_post.html', {'form_2':f})
+        return render(request, 'komunitipage/add_post.html', {'form_2':f ,'comid':communityId})
 
 
 def show_datatype(request):
@@ -255,6 +274,7 @@ def show_datatype(request):
 #TODO: Postlar Geliyor, Ama Value'su ne falan, formun içinde eksik
 def view_community(request, communityId):
     Community_detail = get_object_or_404(Community,id=communityId)
+
     query = Post.objects.filter(community = Community_detail)
     post_list = list()
 
@@ -274,37 +294,30 @@ def view_community(request, communityId):
             }
         )
         id +=1
-
-
 ####################################
 
+    return render(request,'komunitipage/view_community.html',{'community': Community_detail, 'comid':communityId , 'post':another_f })
 
 
-
-    return render(request,'komunitipage/view_community.html', {'community': Community_detail, 'post':another_f })
-
-
+#Bunu Silme
 def view_post(request, postId):
     post = Post.objects.get(id=postId)
+    communityId = post.community.pk
     post_data = post.post_data
     print(post_data)
     print("*****----*****")
     another_f = {}
     another_f['fields'] = []
-    id = 1
 
-    for key in post_data:
-        another_f['fields'].append(
-            {
-                "fields": post_data['fields'],
-            }
-        )
-        id += 1
-
-    return render(request,'komunitipage/view_post.html', {'post': another_f})
+    another_f['fields'].append(
+        {
+            "fields": post_data['fields'],
+        }
+    )
+    return render(request,'komunitipage/view_post.html', {'post': another_f, 'comid':communityId})
 
 
-
+#TODO: BUNU SİL
 def community_edit(request):
     com = Community.objects.get(title='Firefaytırs')
     value_list = list()

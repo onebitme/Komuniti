@@ -50,12 +50,19 @@
 
 <div class="post">
     <h1>{{community.title }}</h1>
-    <tr>{{community.description}}</tr>
+    <tr>{{community.description}} : {{community.pk}} </tr>
+
         <form>
-        <a href="{% url 'add_post'  %}" class="btn btn-secondary my-2">add post</a>
+        <a href="{% url 'add_post' comid  %}" class="btn btn-secondary my-2">add post</a>
     </form>
     {% block add_post %}
-    {%endblock%}
+    {% endblock %}
+
+    <form>
+        <a href="{% url 'add2Community' comid  %}" class="btn btn-secondary my-2">add Data Field</a>
+    </form>
+    {% block add2Community %}
+    {% endblock %}
 
     <div class="album py-5 bg-light">
         <div class="container">
@@ -73,6 +80,7 @@
                                 <td>{{ a.data_names }} : {{ a.values }} & {{a.post_id}}</td>
                                 </p>
                                 {% endfor %}
+
                                 {% block post_view %}
                                 <div class="d-flex justify-content-between align-items-center">
                                     <form>
@@ -80,7 +88,6 @@
                                     </form>
                                 </div>
                                 {% endblock %}
-                                </tr>
                                 </p>
                             </div>
                         </div>
