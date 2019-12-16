@@ -38,7 +38,7 @@ def home(request):
     return render(request, 'komunitipage/home.html', {'communities': communities})
 
 
-def communities(request):
+def communities(request, userid):
     community = "dummy"
     if request.method == 'GET':  # If the form is submitted
         search_query = request.GET.get('search_community', None)
@@ -379,7 +379,7 @@ def searchTag(request):
             'action': 'wbsearchentities',
             'format': 'json',
             'language': 'en',
-            'limit': '20',
+            'limit': '3',
             'search': query
         }
         wiki_request = requests.get(API_ENDPOINT, params=params)

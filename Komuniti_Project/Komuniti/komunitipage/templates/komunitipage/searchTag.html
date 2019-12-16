@@ -18,13 +18,18 @@
 </form>
 
 {%if r_json %}
-{% for glossary in r_json %}
+{% for items in r_json %}
 
 <div class="list-group">
     <p class="list-group-item clearfix" style="margin-bottom:5px;">
-        {{glossary.label}} <small>(<a href="{{glossary.url}}" rel="noopener noreferrer" target="_blank">{{
-        glossary.title}}</a>)</small> {%if glossary.description %}<small class="card-text">: {{ glossary.description
-        }}</small>{%endif%}
+        {{items.label}}
+        <small>
+        <a href="{{items.url}}" rel="noopener noreferrer" target="_blank">
+            {{ items.title}}</a>
+        </small>
+        {%if items.description %}
+        <small class="card-text">: {{ items.description }}</small>
+        {%endif%}
 
     </p>
 </div>
