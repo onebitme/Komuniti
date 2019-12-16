@@ -143,7 +143,7 @@ def add_post(request, communityId):
         data_types['names'] = []
         data_types['field_type'] = []
 
-        print(query[1].community.pk)
+        print(query[0].community.pk)
 
         for i in range(len(query)):
             print(query[i].name)
@@ -183,6 +183,7 @@ def add_post(request, communityId):
             query._mutable = True
             del query['csrfmiddlewaretoken']
             query._mutable= False
+            #TODO: OLM RANDOMU DUZELT.
             pk_rand= random.randint(0,2800);
             i=0
             post_object = Post(community=community, post_data=post_json, pk=pk_rand)
@@ -281,7 +282,6 @@ def view_community(request, communityId):
     for post in query:
         post_list.append(post)
 
-#####################################################
     another_f = {}
     another_f['fields'] = []
     id = 1
@@ -294,7 +294,6 @@ def view_community(request, communityId):
             }
         )
         id +=1
-####################################
 
     return render(request,'komunitipage/view_community.html',{'community': Community_detail, 'comid':communityId , 'post':another_f })
 
@@ -353,15 +352,6 @@ def create_community(request):
     if request.method == "POST":
         query = request.POST
         print(query)
-        print("*******0000********")
-        ######
-        #tagsJson = request.POST.get('tagsJson')
-        #community_tag = CommunityTag()
-        ##community_tag.community = community
-        #community_tag.tag_info = tagsJson
-        #community_tag.save()
-        # deneme = WikidataService.query()
-        # print(deneme)
         community.title=query['community_title']
         community.description = query['community_description']
         community.tags = {"":""}
@@ -374,4 +364,28 @@ def create_community(request):
         return render(request, "komunitipage/create_community.html", {})
 
     return render(request, 'komunitipage/create_community.html')
+
+#TODO: Somehow biraz tag geliyor.
+def searchTag(request):
+    r_json = {}
+    if request.POST:
+        API_ENDPOINT = "https://www.wikidata.org/w/api.php"
+        query = request.POST['search_results']
+        #query.replace(" ", "&")
+
+        print(query)
+
+        params = {
+            'action': 'wbsearchentities',
+            'format': 'json',
+            'language': 'en',
+            'limit': '20',
+            'search': query
+        }
+        wiki_request = requests.get(API_ENDPOINT, params=params)
+        r_json = wiki_request.json()['search']
+        r_json = json.dumps(r_json)
+        r_json = json.loads(r_json)
+        print(r_json)
+    return render(request, 'komunitipage/searchTag.html', {'r_json': r_json})
 
