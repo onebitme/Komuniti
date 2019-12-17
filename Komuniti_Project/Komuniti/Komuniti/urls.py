@@ -3,6 +3,9 @@ from django.urls import path,include
 from rest_framework import routers
 from django.conf.urls.static import static
 from komunitipage import views
+from . import settings
+from django.contrib.staticfiles.urls import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
@@ -14,7 +17,7 @@ urlpatterns = [
     path('community_edit', views.post_new, name='post_add'),
     path('community_search', views.community_search, name='community_search'),
     path('upload_pic', views.upload_pic, name='komunitipage/upload_pic'),
-    path('add_datatype',views.add_datatype, name='add_datatype'),
+    #path('add_datatype',views.add_datatype, name='add_datatype'),
     path('show_datatype', views.show_datatype, name='show_datatype'),
     path('create_community',views.create_community, name='create_community'),
     path('view_community/<int:communityId>',views.view_community, name='view_community'),
@@ -23,3 +26,6 @@ urlpatterns = [
     path('view_post/<int:postId>',views.view_post, name='view_post'),
     path('searchTag', views.searchTag, name='searchTag')
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

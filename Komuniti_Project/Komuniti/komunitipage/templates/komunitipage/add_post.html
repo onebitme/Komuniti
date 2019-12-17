@@ -2,19 +2,27 @@
 {% block add_post %}
 {% load staticfiles %}
 
+<head>
+    <!--    Load Bootstrap via CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
 <h1> Create a new post according to the Community Data Types</h1>
 
-<form id="post_form" method=post>
+<form id="post_form" method=post enctype="multipart/form-data">
     <p>{% csrf_token %}
-
-
 
     {% for field in form_2.fields %}
 
     <p>
         {% if field.field_type == "String"%}
         <p>{{field.name}}</p>
-        <textarea class="form-control"  rows="5" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name="{{field.name}}"></textarea>
+        <textarea class="form-control"  rows="3" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name="{{field.name}}"></textarea>
         {% elif field.field_type == "Integer"%}
         <p>{{field.name}}</p>
         <input type="number"  class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
@@ -24,6 +32,15 @@
         {% elif field.field_type == "Time"%}
         <p>{{field.name}}</p>
         <input type="time" class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
+        {% elif field.field_type == "Image"%}
+        <div class="input-group">
+            <div class="form-control">
+                <input type="image" accept=".jpeg,.jpg,.gif,.png" class="custom-file-input" id="{{field.name}}"
+                       aria-describedby="{{field.name}}" name="{{field.name}}">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file. Only jpg, png, and gif files
+                    can be uploaded. Please do not use blank space on file name.</label>
+            </div>
+        </div>
 
     {% endif %}
 
@@ -36,6 +53,10 @@
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!--Load Bootstrap JavaScript-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
 

@@ -39,31 +39,17 @@
 </body>
 <body>
 
-<form id="community_form" method="post">
+<form id="community_form" method="post" enctype="multipart/form-data">
    {% csrf_token %}
     <p><input class="form-control form-control-lg" type="text" name="community_title" placeholder="Community Name"></p>
     <p><input class="form-control" type="text" placeholder="Community Description" name="community_description"></p>
     <label for="com_tags">Semantic Tags</label>
     </p><input type="text" id="com_tags" class="floatLabel" name="com_tags" data-role="tagsinput" width="100%"></p>
+    </p><input type="image" id="com_image" class="floatLabel" name="com_image"></p>
     <time datetime="YYYY-MM-DDThh:mm:ssTZD"></time>
     <button type="submit">Create</button>
 </form>
 
-
-<div>
-    <form>
-        <a href="{% url 'show_datatype' %}" class="btn btn-secondary my-2">Show Datatype</a>
-    </form>
-    {% block deneme %}
-    {%endblock%}
-
-    <form>
-        <a href="{% url 'add_datatype' %}" class="btn btn-secondary my-2">Add Datatype</a>
-    </form>
-    {% block naber %}
-    {%endblock%}
-
-</div>
 
 </body>
 

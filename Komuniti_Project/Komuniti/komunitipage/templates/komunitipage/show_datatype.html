@@ -24,7 +24,15 @@
         {% elif field.field_type == "Time"%}
         <p>{{field.name}}</p>
         <input type="time" class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
-
+        {% elif field.field_type == "Image"%}
+            <div class="input-group">
+                <div class="form-control">
+                    <input type="file" accept=".jpg,.gif,.png" class="custom-file-input" id="{{field.name}}"
+                        aria-describedby="{{field.name}}" name="{{field.name}}">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file. Only jpg, png, and gif files
+                        can be uploaded. Please do not use blank space on file name.</label>
+                </div>
+            </div>
     {% endif %}
 
     </p>

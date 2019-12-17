@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response, redi
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 
-from .forms import CustomForm, PostForm, ImageUploadForm #ShowForm, AddCommunity
+from .forms import CustomForm, PostForm, ImageUploadForm
 # from djangojsonschema.jsonschema import DjangoFormToJSONSchema
 from django.contrib.postgres.fields import JSONField
 from django.core import serializers
@@ -16,10 +16,8 @@ from rest_framework import viewsets
 from django.core.serializers import serialize
 from django.contrib.auth.models import User, Group
 
-# from .forms import PostForm
 import requests
 from .models import *
-from .services import CommunityService, WikidataService
 import json
 
 
@@ -75,32 +73,6 @@ def community_search(request):
     print(communities + '1')
     return render(request, template, {'community': community})
 
-#TODO: Bunun enum desteklemesi gerekiyor
-def add_datatype(request):
-    if request.method == "POST":
-        query = CustomForm(request.POST)
-        ##https://docs.djangoproject.com/en/2.2/ref/models/instances/
-        if query.is_valid():
-            print('--------------------------')
-            # With this line, it transforms the form from HTML to JsonSchema
-            cleaned_query = query.cleaned_data['data_type']
-            print(cleaned_query)
-            data_type_object = DataType()
-            community = Community.objects.get(title='Book Lovers')
-            data_type_object.community = community
-            data_type_object.name = cleaned_query['Data Field Name']
-            data_type_object.data_field = cleaned_query['Data Field Type']
-            if cleaned_query['is required'] == "True":
-                data_type_object.is_required = True
-            else:
-                data_type_object.is_required = False
-            data_type_object.save()
-            print(data_type_object)
-
-        else:
-            print(11111111111111111111111)
-
-    return render(request, 'komunitipage/add_datatype.html', {'form': CustomForm})
 
 #TODO: Postlar için random isimler alıyorsun.
 def randomString(stringLength=10):
@@ -108,6 +80,9 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
+
+
+#TODO: Bunun enum desteklemesi gerekiyor
 def add2Community(request ,communityId):
     if request.method == "POST":
         query = CustomForm(request.POST)
@@ -118,7 +93,7 @@ def add2Community(request ,communityId):
             cleaned_query = query.cleaned_data['data_type']
             print(cleaned_query)
             data_type_object = DataType()
-            community = Community.objects.get(id= communityId)
+            community = Community.objects.get(id=communityId)
             data_type_object.community = community
             data_type_object.name = cleaned_query['Data Field Name']
             data_type_object.data_field = cleaned_query['Data Field Type']
@@ -134,7 +109,6 @@ def add2Community(request ,communityId):
 
     return render(request, 'komunitipage/add2Community.html', {'form': CustomForm, 'comid':communityId})
 
-
 def add_post(request, communityId):
         community = get_object_or_404(Community, id=communityId)
         query = DataType.objects.filter(community=community)
@@ -142,8 +116,6 @@ def add_post(request, communityId):
         data_types = {}
         data_types['names'] = []
         data_types['field_type'] = []
-
-        print(query[0].community.pk)
 
         for i in range(len(query)):
             print(query[i].name)
@@ -155,11 +127,8 @@ def add_post(request, communityId):
         f['fields'] = []
 
         for key in range(len(data_types['names'])):
-            field_name = data_types['names'][key]#.strip()
+            field_name = data_types['names'][key]
             field_type = data_types['field_type'][key]
-            #print(field_type)
-            #print("------")
-            #print(field_name)
             f['fields'].append(
                 {
                 "name": field_name,
@@ -168,11 +137,7 @@ def add_post(request, communityId):
             )
 
         post_json = {}
-        #post_json['names'] = []
-        #post_json['values'] = []
-        #post_json['field_types'] = data_types['field_type']
         post_json['fields']=[]
-        #print(f)
 
         if request.method == "POST":
             #print(request.POST)
@@ -189,6 +154,27 @@ def add_post(request, communityId):
             post_object = Post(community=community, post_data=post_json, pk=pk_rand)
             for key,value in query.items():
                 print(key,value)
+
+                #This portion of the code is a modified version of the:
+                # https://github.com/batidibek/VirCom/blob/development/vircom/views.py
+                # Comit Number: 9bc0139
+                if key == "Image":
+                    user_file=""
+                    image_file= ImageFile(upload=user_file, url="")
+                    image_url = list(image_file.upload.name)
+                    counter = 0
+                    for key in image_url:
+                        if key ==" ":
+                            image_url[counter] = "_"
+                        counter = counter + 1
+                    image_url = ''.join(image_url)
+                    image_file.url = image_url
+                    image_file.save()
+                    value = "gallery/" + image_url
+                    print("buraya geldin")
+                else:
+                    print("kaydedemedin")
+
                 post_json['fields'].append({
                     "data_names": key,
                     "values": value,
