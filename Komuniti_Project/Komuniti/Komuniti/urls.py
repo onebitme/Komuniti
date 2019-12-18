@@ -24,7 +24,7 @@ urlpatterns = [
     path('add_post/<int:communityId>', views.add_post, name='add_post'),
     path('add2Community/<int:communityId>', views.add2Community, name='add2Community'),
     path('view_post/<int:postId>',views.view_post, name='view_post'),
-    path('searchTag', views.searchTag, name='searchTag')
+    path('searchTag/<int:communityId>', views.searchTagCom, name='searchTag')
 ]
 
 urlpatterns += staticfiles_urlpatterns()

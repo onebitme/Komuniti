@@ -52,7 +52,7 @@
     <h1>{{community.title }}</h1>
     <tr>{{community.description}} : {{community.pk}} </tr>
 
-        <form>
+    <form>
         <a href="{% url 'add_post' comid  %}" class="btn btn-secondary my-2">add post</a>
     </form>
     {% block add_post %}
@@ -63,6 +63,11 @@
     </form>
     {% block add2Community %}
     {% endblock %}
+
+    <form>
+        <a href="{% url 'searchTag' comid  %}" class="btn btn-secondary my-2">Add Community Tags</a>
+    </form>
+
 
     <div class="album py-5 bg-light">
         <div class="container">

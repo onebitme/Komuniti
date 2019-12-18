@@ -3,7 +3,7 @@ import random
 import string
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -262,11 +262,17 @@ def show_datatype(request):
 def view_community(request, communityId):
     Community_detail = get_object_or_404(Community,id=communityId)
 
-    query = Post.objects.filter(community = Community_detail)
+    query_post = Post.objects.filter(community = Community_detail)
     post_list = list()
 
-    for post in query:
+    query_tags = CommunityTag.objects.filter(community = Community_detail)
+    tag_list = list()
+
+    for post in query_post:
         post_list.append(post)
+
+    for tag in query_tags:
+        tag_list.append(tag)
 
     another_f = {}
     another_f['fields'] = []
@@ -299,6 +305,7 @@ def view_post(request, postId):
             "fields": post_data['fields'],
         }
     )
+    print(another_f)
     return render(request,'komunitipage/view_post.html', {'post': another_f, 'comid':communityId})
 
 
@@ -337,10 +344,27 @@ def create_community(request):
     community = Community()
     if request.method == "POST":
         query = request.POST
-        print(query)
+        #######################
+        '''API_ENDPOINT = "https://www.wikidata.org/w/api.php"
+        query_tags = request.POST['search_results']
+        #query.replace(" ", "&")
+
+
+        params = {
+            'action': 'wbsearchentities',
+            'format': 'json',
+            'language': 'en',
+            'limit': '3',
+            'search': query_tags
+        }
+        wiki_request = requests.get(API_ENDPOINT, params=params)
+        r_json = wiki_request.json()['search']
+        r_json = json.dumps(r_json)
+        r_json = json.loads(r_json)'''
+
         community.title=query['community_title']
         community.description = query['community_description']
-        community.tags = {"":""}
+        community.tags = {}
         community.date_pub = datetime.datetime.now()
         print(community.title + "*****" + community.description)
         community.save()
@@ -352,26 +376,37 @@ def create_community(request):
     return render(request, 'komunitipage/create_community.html')
 
 #TODO: Somehow biraz tag geliyor.
-def searchTag(request):
+def searchTagCom(request, communityId):
     r_json = {}
+    community = Community.objects.get(id=communityId)
+
     if request.POST:
-        API_ENDPOINT = "https://www.wikidata.org/w/api.php"
-        query = request.POST['search_results']
-        #query.replace(" ", "&")
+        if request.POST['search_results']:
+            API_ENDPOINT = "https://www.wikidata.org/w/api.php"
+            query = request.POST['search_results']
+            #query.replace(" ", "&")
 
-        print(query)
+            params = {
+                'action': 'wbsearchentities',
+                'format': 'json',
+                'language': 'en',
+                'limit': '3',
+                'search': query
+            }
+            wiki_request = requests.get(API_ENDPOINT, params=params)
+            r_json = wiki_request.json()['search']
+            r_json = json.dumps(r_json)
+            r_json = json.loads(r_json)
+            print(r_json)
+        elif request.POST['selectq'] and request.POST['tags']:
+            selectq = request.POST.get('selectq')
+            tag = request.POST['tags']
+            community.tags['Q_value'].append(selectq)
+            community.tags['tag_name'].append(tag)
+            community.save()
 
-        params = {
-            'action': 'wbsearchentities',
-            'format': 'json',
-            'language': 'en',
-            'limit': '3',
-            'search': query
-        }
-        wiki_request = requests.get(API_ENDPOINT, params=params)
-        r_json = wiki_request.json()['search']
-        r_json = json.dumps(r_json)
-        r_json = json.loads(r_json)
-        print(r_json)
-    return render(request, 'komunitipage/searchTag.html', {'r_json': r_json})
+
+        else:
+            return render(request, 'komunitipage/searchTag.html', {'r_json': r_json, 'comid':communityId})
+    return render(request, 'komunitipage/searchTag.html', {'r_json': r_json,'comid':communityId})
 

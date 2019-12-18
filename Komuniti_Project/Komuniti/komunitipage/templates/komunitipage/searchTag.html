@@ -10,32 +10,46 @@
 <body>
 
 
-<form id="searchform" action="{% url 'searchTag' %}" method="POST" accept-charset="utf-8">
+<form id="searchform" action="{% url 'searchTag' comid %}" method="POST" accept-charset="utf-8">
     {% csrf_token %}
     <div class="container" style="margin-top:120px;">
         <input class="form-control" type="text" placeholder="Search" name="search_results">
     </div>
-</form>
-
-{%if r_json %}
-{% for items in r_json %}
+    {%if r_json %}
+    {% for items in r_json %}
 
 <div class="list-group">
     <p class="list-group-item clearfix" style="margin-bottom:5px;">
         {{items.label}}
         <small>
-        <a href="{{items.url}}" rel="noopener noreferrer" target="_blank">
-            {{ items.title}}</a>
+        <a href="{{glossary.url}}" rel="noopener noreferrer" target="_blank">{{ items.title}}</a>
         </small>
         {%if items.description %}
         <small class="card-text">: {{ items.description }}</small>
         {%endif%}
 
+
     </p>
 </div>
-
 {% endfor %}
-{%endif%}
+
+
+
+        <select required class="form-control"  id="exampleFormControlSelect1" name="selectq">
+        {% for items in r_json %}
+        <div class="form-group">
+            <option value="{{items.title}}" id="wikidataq"> {{items.title}} : {{items.label}} : {{ items.description }}</option>
+        </div>
+        {% endfor %}
+    </select>
+    <input type="text"  value="" class="form-control" id="tags"  name="tags" data-role="tagsinput" width="100%">
+
+    <button type="submit">Post</button>
+{% endif %}
+
+</form>
+
+
 
 </body>
 </html>

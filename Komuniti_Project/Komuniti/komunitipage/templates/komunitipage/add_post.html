@@ -14,7 +14,7 @@
 
 <h1> Create a new post according to the Community Data Types</h1>
 
-<form id="post_form" method=post enctype="multipart/form-data">
+<form id="post_form" method="post" enctype="multipart/form-data">
     <p>{% csrf_token %}
 
     {% for field in form_2.fields %}

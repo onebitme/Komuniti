@@ -21,6 +21,7 @@
     {# Tags input#}
     <link href="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet"/>
 </head>
+
 <body>
 
 <script>
@@ -37,21 +38,19 @@
     </div>
 </header>
 </body>
-<body>
 
-<form id="community_form" method="post" enctype="multipart/form-data">
+
+<form id="community_form" method="post" enctype="multipart/form-data" onkeydown="return event.key != 'Enter';">
    {% csrf_token %}
-    <p><input class="form-control form-control-lg" type="text" name="community_title" placeholder="Community Name"></p>
-    <p><input class="form-control" type="text" placeholder="Community Description" name="community_description"></p>
-    <label for="com_tags">Semantic Tags</label>
-    </p><input type="text" id="com_tags" class="floatLabel" name="com_tags" data-role="tagsinput" width="100%"></p>
-    </p><input type="image" id="com_image" class="floatLabel" name="com_image"></p>
-    <time datetime="YYYY-MM-DDThh:mm:ssTZD"></time>
-    <button type="submit">Create</button>
+    <p><input class="form-control form-control-lg" type="text" name="community_title" placeholder="Community Name" onkeydown="return event.key != 'Enter';"></p>
+    <p><input class="form-control" type="text" placeholder="Community Description" name="community_description" onkeydown="return event.key != 'Enter';"></p>
+    <time datetime="YYYY-MM-DDThh:mm:ssTZD" onkeydown="return event.key != 'Enter';"></time>
+    <button type="submit" onkeydown="return event.key != 'Enter';">Create Community</button>
 </form>
 
-
 </body>
+
+
 
 <!-- Include jQuery -->
 {#<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}

@@ -21,7 +21,8 @@
      <button type="submit" disabled style="display: none" aria-hidden="true"></button>
      <p>{% csrf_token %}
           <br>{{ form.media }}
-     <p></p>
+     </p>
+    <p>
      {{ form.as_table }}
      </p>
      <button type="submit">Create</button>

@@ -1,0 +1,94 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+
+<link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/album/">
+
+    <!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+
+<form method="POST" autocomplete="off" class="form-control">
+    {% csrf_token %}
+    {% if error_message %}<p style="color: red"><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+                <div class="form-group">
+                <p><label for="tags">Semantic Tags</label></p>
+                <input type="text" required onchange="searchTag() "  class="form-control" id="tags2" class="floatLabel" name="tags2" data-role="tagsinput" width="100%">
+                <input type="submit" style="color: #000000;">
+                </div>
+
+                {%if r_json %}
+                <div class="form-group">
+                    <div style="background : gray;">
+                    <label for="exampleFormControlSelect1">Choose Related Topic from WikiDataAPI!</label>
+
+                    <select required class="form-control" id="exampleFormControlSelect1">
+                    {% for glossary in r_json %}
+                    <option value="{{glossary.title}}" id="wikidataq"> {{glossary.title}} : {{glossary.label}} : {{ glossary.description }}</option>
+                    {% endfor %}
+                    </select>
+                    Tag name:
+                    <p><input type="text"  value="" class="form-control" id="tags"  name="tags" data-role="tagsinput" width="100%"></p>
+                    <p><input type="button" onclick="myFunction() " style="color: #000000;"  value="Add Tag"></p>
+                    Tag Record:
+                    <p><input type="text"  class="form-control" name="labeltag" id="labeltag" data-role="tagsinput" width="100%"></p>
+                    <p><input type="button" id="tagtopost" onclick="addValue() " style="color: #000000;" value="Continue to Create Post"></p>
+
+                    </div>
+
+                </div>
+
+                {% for glossary in r_json %}
+                <div class="list-group">
+                    <p class="list-group-item clearfix" style="margin-bottom:5px;">
+                        {{glossary.label}} <small>(<a href="{{glossary.url}}" rel="noopener noreferrer" target="_blank">{{ glossary.title}}</a>)</small> {%if glossary.description %}<small class="card-text">: {{ glossary.description }}</small>{%endif%}
+
+                    </p>
+
+                </div>
+                {% endfor %}
+              {% endif %}
+    </div>
+
+</form>
+
+<script>
+function myFunction(val) {
+    tagName = document.getElementById("tags").value
+    tagQvalue = document.getElementById("wikidataq").value
+    tag = tagName + ":" + tagQvalue + ","
+
+    oldVal = document.getElementById("labeltag").value
+    document.getElementById("labeltag").value = oldVal + "   " + tag ;
+    document.getElementById("tags").value = "" ;
+
+
+}
+function addValue(val) {
+    labeltag = document.getElementById("labeltag").value
+    localStorage.setItem("labeltag",labeltag)
+
+
+}
+
+window.onload = function() {
+    var labeltag = document.getElementById("labeltag").value ;
+    localStorage.setItem("labeltag",labeltag);
+}
+
+
+</script>
+
+
+
+</body>
+
+</html>
