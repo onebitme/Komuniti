@@ -10,12 +10,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('advancedSearch', views.advancedSearch, name='advancedSearch'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('home', views.home, name='home'),
-    path('community_' , views.communities, name='communities'),
-    path('community_edit', views.post_new, name='post_add'),
-    path('community_search', views.community_search, name='community_search'),
     path('upload_pic', views.upload_pic, name='komunitipage/upload_pic'),
     #path('add_datatype',views.add_datatype, name='add_datatype'),
     path('show_datatype', views.show_datatype, name='show_datatype'),

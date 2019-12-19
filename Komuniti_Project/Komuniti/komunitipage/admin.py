@@ -5,5 +5,4 @@ from .models import *
 admin.site.register(Community)
 admin.site.register(Post)
 admin.site.register(DataType)
-admin.site.register(CommunityTag)
 #admin.site.register(DataField)

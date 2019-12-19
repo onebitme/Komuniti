@@ -1,19 +1,19 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.contrib.postgres.fields import HStoreField, JSONField
+from django.contrib.postgres.fields import HStoreField, JSONField, ArrayField
 from django.db.models import ImageField
 
 
 class Community(models.Model):
     title = models.CharField(max_length=120, unique=True)
     description = models.TextField(blank=True)
-    # TODO: Community Yaratmak için bir form olması lazım
     image = models.ImageField(upload_to='community_thumbnail', default='community_thumbnail/no-img.jpg')
     tags = JSONField(blank=True, default={})
     date_pub = models.DateTimeField(blank=True)
 
     def __str__(self):
         return self.title
+
     def __int__(self):
         return self.id
 
@@ -42,13 +42,15 @@ class Post(models.Model):
     post_data = JSONField(default="")
 
 
-class CommunityTag(models.Model):
-    tag_desc = models.CharField(max_length=100)
-    community = models.ForeignKey(Community, default="", on_delete=models.CASCADE)
-    tag_info = JSONField(default="")
-
 class ImageFile(models.Model):
     upload = models.ImageField(upload_to='gallery')
     url = models.TextField(blank = True)
     def __str__(self):
         return str(self.upload)
+
+
+class User(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    community_list = ArrayField(models.IntegerField(), blank=True, null=True)
+    def __str__(self):
+        return self.user.username

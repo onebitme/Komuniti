@@ -20,66 +20,113 @@ import requests
 from .models import *
 import json
 
-
-class LazyEncoder(DjangoJSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, 'json'):
-            return str(obj)
-        return super().default(obj)
-
-
+'''
+Code Revisit: 
+removed def's:
+1-Lazy Encoder
+2- communities
+3- post_new
+4- community_search
+5- random_string generator  
+'''
 def home(request):
-    communities = Community.objects
-    # Currently displays one title
-    # post = Post.objects.get(title='')
 
-    return render(request, 'komunitipage/home.html', {'communities': communities})
-
-
-def communities(request, userid):
-    community = "dummy"
-    if request.method == 'GET':  # If the form is submitted
-        search_query = request.GET.get('search_community', None)
-
-        if search_query != None:
-            community = Community.objects.filter(title__icontains=search_query)
-
-        else:
-            community = None
-    print(community)
-    return render(request, 'komunitipage/community_.html', {'community': community})
-
-
-def post_new(request):
-    if request.method == "POST":
-        form = PostForm(request.POST)
-    else:
-        form = PostForm()
-    return render(request, 'komunitipage/community_edit.html', {'post': form})
-
-
-def community_search(request):
-    query = request.GET.get('search_community')
-    template = 'komunitipage/home.html'
-    community = Community.objects.filter(title__icontains=query)
+    community = Community.objects
 
     if request.method == 'GET':  # If the form is submitted
-        search_query = request.GET.get('search_community', None)
-
-        if search_query != None:
+        search_query = request.GET.get('search_community')
+        if search_query != "" and search_query !=None:
             community = Community.objects.filter(title__icontains=search_query)
+        elif search_query != "" and search_query !=None:
+            community = Community.objects.filter(description__icontains=search_query)
         else:
             community = Community.objects.all()
-    print(communities + '1')
-    return render(request, template, {'community': community})
+
+    return render(request, 'komunitipage/home.html', {'communities': community})
 
 
-#TODO: Postlar için random isimler alıyorsun.
-def randomString(stringLength=10):
-    """Generate a random string of fixed length """
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(stringLength))
+def advancedSearch(request):
+    tags = ""
+    posts = ""
+    communities = ""
+    community_query = "böyle de bir şey yoktur"
 
+
+    if request.method == 'POST':
+        community_query = request.POST['community_search']
+        post_query = request.POST['post_search']
+        tags_query = request.POST['tag_search']
+        #Burası Boş Formdur
+        if community_query =="" and post_query == "" and tags_query == "":
+            print("tam boş search")
+            return render(request, 'komunitipage/advancedSearch.html',{'tags':tags,'posts':posts,'communities': communities})
+        #Only Community Search
+        elif community_query !="" and post_query == "" and tags_query == "":
+            communities = Community.objects.filter(title__icontains=community_query)
+            print("sadece community search")
+            return render(request, 'komunitipage/advancedSearch.html', {'tags': tags, 'posts': posts, 'communities': communities})
+        #TODO: Only Tags Search
+        #Only Post Search
+        elif community_query =="" and post_query != "" and tags_query == "":
+            posts = Post.objects.filter()
+            post_list = list()
+            for post in posts:
+                post_list.append(post)
+
+            another_f = {}
+            another_f['fields'] = []
+            id = 1
+
+            for key in post_list:
+                for i in key.post_data['fields']:
+                    if i['values']== post_query:
+                        another_f['fields'].append(
+                            {
+                            "fields": key.post_data['fields'],
+                            "post_id": key.pk
+                            }
+                        )
+
+
+            print("Sadece Post Searchteyiz")
+            return render(request, 'komunitipage/advancedSearch.html',{'tags': tags, 'post': another_f, 'communities': communities})
+        #Inside Community Post Search
+        elif community_query !="" and post_query != "" and tags_query == "":
+            communities = Community.objects.filter(title__icontains=community_query)
+            community_list=list()
+            for community in communities:
+                community_list.append(community)
+                print(community.title)
+                posts = Post.objects.filter(community=community)
+                post_list = list()
+                for post in posts:
+                    post_list.append(post)
+
+            another_f = {}
+            another_f['fields'] = []
+            id = 1
+
+            for key in post_list:
+                for i in key.post_data['fields']:
+                    if i['values']== post_query:
+                        another_f['fields'].append(
+                            {
+                            "fields": key.post_data['fields'],
+                            "post_id": key.pk
+                            }
+                        )
+            print("Post in Community Search")
+            return render(request, 'komunitipage/advancedSearch.html',{'tags': tags, 'post': another_f})
+        #Only Tags
+        elif community_query == "" and post_query == "" and tags_query != "":
+            communities = Community.objects.filter(title__icontains=community_query)
+            print("sadece tags search")
+            return render(request, 'komunitipage/advancedSearch.html',
+                          {'tags': tags, 'posts': posts, 'communities': communities})
+    else:
+        print("Post olmadı")
+
+    return render(request, 'komunitipage/advancedSearch.html', {'tags':tags,'posts':posts,'communities': communities})
 
 
 #TODO: Bunun enum desteklemesi gerekiyor
@@ -108,6 +155,7 @@ def add2Community(request ,communityId):
             print(11111111111111111111111)
 
     return render(request, 'komunitipage/add2Community.html', {'form': CustomForm, 'comid':communityId})
+
 
 def add_post(request, communityId):
         community = get_object_or_404(Community, id=communityId)
@@ -258,7 +306,6 @@ def show_datatype(request):
     return render(request, 'komunitipage/show_datatype.html', {'form_2': f})
 
 
-#TODO: Postlar Geliyor, Ama Value'su ne falan, formun içinde eksik
 def view_community(request, communityId):
     Community_detail = get_object_or_404(Community,id=communityId)
 
@@ -286,7 +333,6 @@ def view_community(request, communityId):
     return render(request,'komunitipage/view_community.html',{'community': Community_detail, 'comid':communityId , 'post':another_f, 'comtags':Community_detail.tags})
 
 
-#Bunu Silme
 def view_post(request, postId):
     post = Post.objects.get(id=postId)
     communityId = post.community.pk
@@ -305,24 +351,6 @@ def view_post(request, postId):
     return render(request,'komunitipage/view_post.html', {'post': another_f, 'comid':communityId})
 
 
-#TODO: BUNU SİL
-def community_edit(request):
-    com = Community.objects.get(title='Firefaytırs')
-    value_list = list()
-    value_list.append('top')
-    value_list.append('True')
-    extra_field_data = "{"
-    i = 0
-
-    for key, value in com.post_type.items():
-        extra_field_data += "'" + key + "':" + "'" + value_list[i] + "',"
-        i += 1
-
-    extra_field_data = extra_field_data[:-1]
-    extra_field_data += "}"
-    extra_field_data = json.dumps(extra_field_data)
-    print(extra_field_data)
-    return render(request, 'komunitipage/community_edit.html')
 
 #TODO: Does not Upload.
 def upload_pic(request):
@@ -335,7 +363,7 @@ def upload_pic(request):
             return HttpResponse('image upload success')
     return HttpResponseForbidden('allowed only via POST')
 
-#TODO: TAG YOK
+#After community is created, community builder needs to add the tags
 def create_community(request):
     community = Community()
     if request.method == "POST":
@@ -356,7 +384,7 @@ def create_community(request):
 
     return render(request, 'komunitipage/create_community.html')
 
-#TODO: Somehow biraz tag geliyor.
+#TODO: Bundan bir tane de postlar için yap
 def searchTagCom(request, communityId):
     r_json = {}
     community = Community.objects.get(id=communityId)
@@ -390,9 +418,6 @@ def searchTagCom(request, communityId):
                 }
             )
             community.save()
-
-
-
         else:
             return render(request, 'komunitipage/searchTag.html', {'r_json': r_json, 'comid':communityId})
     return render(request, 'komunitipage/searchTag.html', {'r_json': r_json,'comid':communityId})
