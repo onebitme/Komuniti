@@ -265,14 +265,8 @@ def view_community(request, communityId):
     query_post = Post.objects.filter(community = Community_detail)
     post_list = list()
 
-    query_tags = CommunityTag.objects.filter(community = Community_detail)
-    tag_list = list()
-
     for post in query_post:
         post_list.append(post)
-
-    for tag in query_tags:
-        tag_list.append(tag)
 
     another_f = {}
     another_f['fields'] = []
@@ -286,8 +280,10 @@ def view_community(request, communityId):
             }
         )
         id +=1
+    print(another_f)
+    print(Community_detail.tags)
 
-    return render(request,'komunitipage/view_community.html',{'community': Community_detail, 'comid':communityId , 'post':another_f })
+    return render(request,'komunitipage/view_community.html',{'community': Community_detail, 'comid':communityId , 'post':another_f, 'comtags':Community_detail.tags})
 
 
 #Bunu Silme
@@ -345,26 +341,11 @@ def create_community(request):
     if request.method == "POST":
         query = request.POST
         #######################
-        '''API_ENDPOINT = "https://www.wikidata.org/w/api.php"
-        query_tags = request.POST['search_results']
-        #query.replace(" ", "&")
-
-
-        params = {
-            'action': 'wbsearchentities',
-            'format': 'json',
-            'language': 'en',
-            'limit': '3',
-            'search': query_tags
-        }
-        wiki_request = requests.get(API_ENDPOINT, params=params)
-        r_json = wiki_request.json()['search']
-        r_json = json.dumps(r_json)
-        r_json = json.loads(r_json)'''
 
         community.title=query['community_title']
         community.description = query['community_description']
         community.tags = {}
+        community.tags['fields'] = []
         community.date_pub = datetime.datetime.now()
         print(community.title + "*****" + community.description)
         community.save()
@@ -379,6 +360,7 @@ def create_community(request):
 def searchTagCom(request, communityId):
     r_json = {}
     community = Community.objects.get(id=communityId)
+    print(community.tags)
 
     if request.POST:
         if request.POST['search_results']:
@@ -401,9 +383,14 @@ def searchTagCom(request, communityId):
         elif request.POST['selectq'] and request.POST['tags']:
             selectq = request.POST.get('selectq')
             tag = request.POST['tags']
-            community.tags['Q_value'].append(selectq)
-            community.tags['tag_name'].append(tag)
+            community.tags['fields'].append(
+                {
+                    "Q": selectq,
+                    "tag": tag
+                }
+            )
             community.save()
+
 
 
         else:

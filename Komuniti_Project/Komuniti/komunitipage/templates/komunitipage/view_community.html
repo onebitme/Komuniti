@@ -68,7 +68,17 @@
         <a href="{% url 'searchTag' comid  %}" class="btn btn-secondary my-2">Add Community Tags</a>
     </form>
 
-
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                {% for a in comtags.fields %}
+                <p>
+                <a href="https://www.wikidata.org/wiki/{{a.Q}}" class="btn btn-secondary my-2">{{a.tag}}</a>
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+        </div>
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
@@ -81,10 +91,10 @@
                                 <p class="card-text">
                                     <tr>
                                         {% for a in k.fields %}
-                                    <p>
-                                <td>{{ a.data_names }} : {{ a.values }}</td>
-                                </p>
-                                {% endfor %}
+                                        <p>
+                                        <td>{{ a.data_names }} : {{ a.values }}</td>
+                                        </p>
+                                        {% endfor %}
 
                                 {% block post_view %}
                                 <div class="d-flex justify-content-between align-items-center">
