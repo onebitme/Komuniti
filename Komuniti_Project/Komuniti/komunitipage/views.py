@@ -447,3 +447,7 @@ def searchTagCom(request, communityId):
             return render(request, 'komunitipage/searchTag.html', {'r_json': r_json, 'comid':communityId})
     return render(request, 'komunitipage/searchTag.html', {'r_json': r_json,'comid':communityId})
 
+
+def login(request):
+    return render(request, 'komunitipage/login.html')
+
