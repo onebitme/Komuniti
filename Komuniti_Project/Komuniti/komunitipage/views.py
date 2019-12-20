@@ -56,7 +56,7 @@ def advancedSearch(request):
         community_query = request.POST['community_search']
         post_query = request.POST['post_search']
         tags_query = request.POST['tag_search']
-        #Burası Boş Formdur
+        #No Form with Search Info
         if community_query =="" and post_query == "" and tags_query == "":
             print("tam boş search")
             return render(request, 'komunitipage/advancedSearch.html',{'tags':tags,'posts':posts,'communities': communities})
@@ -65,7 +65,28 @@ def advancedSearch(request):
             communities = Community.objects.filter(title__icontains=community_query)
             print("sadece community search")
             return render(request, 'komunitipage/advancedSearch.html', {'tags': tags, 'posts': posts, 'communities': communities})
-        #TODO: Only Tags Search
+        #TODO: Only Tags Search & Tags of community combined
+        elif community_query != "" and post_query == "" and tags_query != "":
+            communities = Community.objects.filter(title__icontains=community_query)
+            community_list = list()
+            another_f = {}
+            another_f['fields'] = []
+            for community in communities:
+                community_list.append(community)
+            for i in range(len(community_list)):
+                tags_json=community_list[i].tags['fields']
+                for key in tags_json:
+                    #TODO: No Case sensitive
+                    if tags_query in key['tag']:
+                        another_f['fields'].append(
+                            {
+                                "Q": key['Q'],
+                                "tag": key['tag']
+                            }
+                        )
+            return render(request, 'komunitipage/advancedSearch.html',
+                          {'tags': another_f})
+
         #Only Post Search
         elif community_query =="" and post_query != "" and tags_query == "":
             posts = Post.objects.filter()
@@ -79,50 +100,54 @@ def advancedSearch(request):
 
             for key in post_list:
                 for i in key.post_data['fields']:
-                    if i['values']== post_query:
+                    if post_query in i['values']:
                         another_f['fields'].append(
                             {
                             "fields": key.post_data['fields'],
                             "post_id": key.pk
                             }
                         )
-
 
             print("Sadece Post Searchteyiz")
             return render(request, 'komunitipage/advancedSearch.html',{'tags': tags, 'post': another_f, 'communities': communities})
-        #Inside Community Post Search
+        #Inside Community Post Search // Included the error handling for this case
         elif community_query !="" and post_query != "" and tags_query == "":
             communities = Community.objects.filter(title__icontains=community_query)
-            community_list=list()
-            for community in communities:
-                community_list.append(community)
-                print(community.title)
-                posts = Post.objects.filter(community=community)
-                post_list = list()
-                for post in posts:
-                    post_list.append(post)
+            if len(communities) > 0:
+                community_list=list()
+                for community in communities:
+                    community_list.append(community)
+                    posts = Post.objects.filter(community=community)
+                    if len(posts)>0:
+                        post_list = list()
+                        for post in posts:
+                            post_list.append(post)
 
-            another_f = {}
-            another_f['fields'] = []
-            id = 1
+                        another_f = {}
+                        another_f['fields'] = []
 
-            for key in post_list:
-                for i in key.post_data['fields']:
-                    if i['values']== post_query:
-                        another_f['fields'].append(
-                            {
-                            "fields": key.post_data['fields'],
-                            "post_id": key.pk
-                            }
-                        )
-            print("Post in Community Search")
-            return render(request, 'komunitipage/advancedSearch.html',{'tags': tags, 'post': another_f})
-        #Only Tags
-        elif community_query == "" and post_query == "" and tags_query != "":
-            communities = Community.objects.filter(title__icontains=community_query)
-            print("sadece tags search")
-            return render(request, 'komunitipage/advancedSearch.html',
-                          {'tags': tags, 'posts': posts, 'communities': communities})
+                        for key in post_list:
+                             for i in key.post_data['fields']:
+                                if  post_query in i['values']:
+                                    another_f['fields'].append(
+                                        {
+                                        "fields": key.post_data['fields'],
+                                        "post_id": key.pk
+                                        }
+                                    )
+                        if len(another_f['fields'])<1:
+                            print(another_f)
+                            message = "No Posts as: " + post_query + " under Community: " + community.title
+                            return render(request, 'komunitipage/advancedSearch.html', {'post': another_f,'message': message})
+                        return render(request, 'komunitipage/advancedSearch.html',{'post': another_f})
+                    else:
+                        message = "No Posts under Community: " + community.title
+                        print(message)
+                        return render(request, 'komunitipage/advancedSearch.html', {'message': message})
+            else:
+                message = "No Community Exists"
+                return render(request, 'komunitipage/advancedSearch.html', {'message': message})
+
     else:
         print("Post olmadı")
 

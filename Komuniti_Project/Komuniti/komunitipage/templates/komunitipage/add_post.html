@@ -32,6 +32,12 @@
         {% elif field.field_type == "Time"%}
         <p>{{field.name}}</p>
         <input type="time" class="form-control" aria-describedby="{{field.name}}" placeholder="Enter {{field.name}}" name={{field.name}}>
+        {% elif field.field_type == "Boolean"%}
+        <p>{{field.name}}</p>
+        <select required class="form-control"  id={{field.name}}" name={{field.name}}>
+            <option>True</option>
+            <option>False</option>
+        </select>
         {% elif field.field_type == "Image"%}
         <div class="input-group">
             <div class="form-control">

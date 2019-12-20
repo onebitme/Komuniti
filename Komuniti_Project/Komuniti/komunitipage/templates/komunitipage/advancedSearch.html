@@ -33,6 +33,7 @@
 
 
 
+
     </style>
 
 
@@ -70,6 +71,8 @@
     </div>
     <button type="submit" style="margin-top:40px;margin-left:110px">Search</button>
 </form>
+
+{{message}}
 
 <div class="album py-5 bg-light">
     <div class="container">
@@ -126,6 +129,17 @@
                 </div>
             </div>
             {% endfor %}
+        </div>
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    {% for a in tags.fields %}
+                    <p>
+                        <a href="https://www.wikidata.org/wiki/{{a.Q}}" class="btn btn-secondary my-2">{{a.tag}}</a>
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 </div>
