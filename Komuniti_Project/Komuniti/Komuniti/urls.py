@@ -11,7 +11,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('', views.home, name='home'),
     path('advancedSearch', views.advancedSearch, name='advancedSearch'),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('home', views.home, name='home'),
     path('upload_pic', views.upload_pic, name='komunitipage/upload_pic'),

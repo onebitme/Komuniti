@@ -1,7 +1,5 @@
 {% extends 'komunitipage/view_community.html' %}
-{% block add_post %}
 {% load staticfiles %}
-
 <head>
     <!--    Load Bootstrap via CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -11,6 +9,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
+<header>
+        <a href="{% url 'home' %}" class="container d-flex align-items-center">
+            <strong>KOMUNITI</strong>
+        </a>
+</header>
+{% block add_post %}
+
+
 
 <h1> Create a new post according to the Community Data Types</h1>
 
@@ -65,7 +71,5 @@
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 
-
 {% endblock %}
-
 

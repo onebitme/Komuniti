@@ -425,7 +425,7 @@ def searchTagCom(request, communityId):
                 'action': 'wbsearchentities',
                 'format': 'json',
                 'language': 'en',
-                'limit': '3',
+                'limit': '5',
                 'search': query
             }
             wiki_request = requests.get(API_ENDPOINT, params=params)

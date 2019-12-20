@@ -32,6 +32,8 @@
       }
 
 
+
+
     </style>
     <header>
         <div class="navbar navbar-dark bg-dark shadow-sm">
@@ -50,7 +52,7 @@
 
 <div class="post">
     <h1>{{community.title }}</h1>
-    <tr>{{community.description}} : {{community.pk}} </tr>
+    <tr>{{community.description}}</tr>
 
     <form>
         <a href="{% url 'add_post' comid  %}" class="btn btn-secondary my-2">add post</a>
@@ -71,17 +73,6 @@
     <div class="album py-5 bg-light">
         <div class="container">
             <div class="row">
-                {% for a in comtags.fields %}
-                <p>
-                <a href="https://www.wikidata.org/wiki/{{a.Q}}" class="btn btn-secondary my-2">{{a.tag}}</a>
-                </p>
-                {% endfor %}
-            </div>
-        </div>
-        </div>
-    <div class="album py-5 bg-light">
-        <div class="container">
-            <div class="row">
                 {% for k in post.fields %}
                 <div class="col-md-4">
                     <div class="card mb-4 shadow-sm">
@@ -91,15 +82,16 @@
                                 <p class="card-text">
                                     <tr>
                                         {% for a in k.fields %}
-                                        <p>
-                                        <td>{{ a.data_names }} : {{ a.values }}</td>
-                                        </p>
-                                        {% endfor %}
+                                <p>
+                                <td>{{ a.data_names }} : {{ a.values }}</td>
+                                </p>
+                                {% endfor %}
 
                                 {% block post_view %}
                                 <div class="d-flex justify-content-between align-items-center">
                                     <form>
-                                        <a href="{% url 'view_post' k.post_id %}" class="btn btn-secondary my-2">View </a>
+                                        <a href="{% url 'view_post' k.post_id %}"
+                                           class="btn btn-secondary my-2">View </a>
                                     </form>
                                 </div>
                                 {% endblock %}
@@ -109,6 +101,20 @@
                     </div>
                 </div>
                 {% endfor %}
+
+            </div>
+            <tr>Community Wikidata Tags</tr>
+            <div class="album py-2 bg-light">
+                <div class="container align-items-center">
+                    <div class="row-">
+                        {% for a in comtags.fields %}
+                        <div class="col-md-8">
+                            <a href="https://www.wikidata.org/wiki/{{a.Q}}"
+                               class="btn btn-secondary my-1">{{a.tag}}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
