@@ -53,13 +53,13 @@
     <section class="jumbotron text-center">
         <div class="container">
             <h1 class="jumbotron-heading">KOMUNITI</h1>
-                {% if logstatus == "Not" %}
-                <h2 class="lead text-muted">What is happening in this html? Log in Kommy</h2>
+                {% if logstatus != "Yes" %}
+                <h2 class="lead text-muted">{{logstatus}}</h2>
                 {% elif logstatus == "Yes" %}
-                <h2 class="lead text-muted">Welcome Kommy</h2>
+                <h2 class="lead text-muted">Welcome Home Kommy, Enjoy</h2>
                 {% endif %}
             <!-- Search form -->
-            {% if logstatus == "Not" %}
+            {% if logstatus != "Yes" %}
             <form>
                 <a href="{% url 'login' %}" class="btn btn-secondary my-2">Here Login Kommy</a>
             </form>
@@ -117,7 +117,7 @@
         </div>
             {% if logstatus == "Yes" %}
             <form>
-                <a href="{% url 'logout' %}" class="btn btn-secondary my-2">See You Soon Kommy</a>
+                <a href="{% url 'logout' %}" class="btn btn-secondary my-2">Log out Stand Up Dont Give Up The Fight Kommy</a>
             </form>
             {% endif %}
         </div>

@@ -14,7 +14,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home', views.home, name='home'),
     path('upload_pic', views.upload_pic, name='komunitipage/upload_pic'),
-    path('show_datatype', views.show_datatype, name='show_datatype'),
     path('create_community',views.create_community, name='create_community'),
     path('view_community/<int:communityId>',views.view_community, name='view_community'),
     path('add_post/<int:communityId>', views.add_post, name='add_post'),
@@ -22,7 +21,7 @@ urlpatterns = [
     path('view_post/<int:postId>',views.view_post, name='view_post'),
     path('searchTag/<int:communityId>', views.searchTagCom, name='searchTag'),
 
-    #User
+    #Kommy Handlers!
     path('login', views.log_in, name='login'),
     path('logout', views.log_out, name='logout'),
     path('authenticated_user/', views.authenticated_user, name='authenticate_user'),
