@@ -2,10 +2,12 @@ import datetime
 import random
 import string
 
+from django.contrib.auth import authenticate , login, logout
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import CustomForm, PostForm, ImageUploadForm
@@ -31,18 +33,23 @@ removed def's:
 '''
 def home(request):
 
-    community = Community.objects
+    if request.user.is_authenticated:
+        logstatus = "Yes"
+        community = Community.objects
+        print('oldu bu iş')
+        if request.method == 'GET':  # If the form is submitted
+            search_query = request.GET.get('search_community')
+            if search_query != "" and search_query != None:
+                community = Community.objects.filter(title__icontains=search_query)
+            elif search_query != "" and search_query != None:
+                community = Community.objects.filter(description__icontains=search_query)
+            else:
+                community = Community.objects.all()
+    else:
+        logstatus = "Not"
+        community = None
 
-    if request.method == 'GET':  # If the form is submitted
-        search_query = request.GET.get('search_community')
-        if search_query != "" and search_query !=None:
-            community = Community.objects.filter(title__icontains=search_query)
-        elif search_query != "" and search_query !=None:
-            community = Community.objects.filter(description__icontains=search_query)
-        else:
-            community = Community.objects.all()
-
-    return render(request, 'komunitipage/home.html', {'communities': community})
+    return render(request, 'komunitipage/home.html', {'communities': community , 'logstatus' : logstatus})
 
 
 def advancedSearch(request):
@@ -448,6 +455,26 @@ def searchTagCom(request, communityId):
     return render(request, 'komunitipage/searchTag.html', {'r_json': r_json,'comid':communityId})
 
 
-def login(request):
+def log_in(request):
     return render(request, 'komunitipage/login.html')
+
+
+def authenticated_user(request):
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        if username=="" or password == "":
+            return render(request, 'komunitipage/login.html', {'message': "Empty Fields You Got There!"})
+        user = authenticate(request, username=username, password = password)
+        print(username)
+        if user is None:
+            return render(request, 'komunitipage/login.html', {'message': "Wrong Credentials My fellow Kommy"})
+        elif user is not None:
+            login(request, user)
+            return home(request)
+
+def log_out(request):
+    logout(request)
+    return render(request, 'komunitipage/logout.html')
+
 

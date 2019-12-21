@@ -49,8 +49,9 @@ class ImageFile(models.Model):
         return str(self.upload)
 
 
-class User(models.Model):
+class CommunityUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    community_list = ArrayField(models.IntegerField(), blank=True, null=True)
+    joined_communities = ArrayField(models.IntegerField(), blank=True, null=True)
+
     def __str__(self):
-        return self.user.username
+        return self.user

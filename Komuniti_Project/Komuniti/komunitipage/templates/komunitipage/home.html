@@ -53,8 +53,17 @@
     <section class="jumbotron text-center">
         <div class="container">
             <h1 class="jumbotron-heading">KOMUNITI</h1>
-            <h2 class="lead text-muted">What is happening in this html</h2>
+                {% if logstatus == "Not" %}
+                <h2 class="lead text-muted">What is happening in this html? Log in Kommy</h2>
+                {% elif logstatus == "Yes" %}
+                <h2 class="lead text-muted">Welcome Kommy</h2>
+                {% endif %}
             <!-- Search form -->
+            {% if logstatus == "Not" %}
+            <form>
+                <a href="{% url 'login' %}" class="btn btn-secondary my-2">Here Login Kommy</a>
+            </form>
+            {% elif logstatus == "Yes" %}
             <form id="searchform"  method="get" accept-charset="utf-8">
                 <div class="container" style="margin-top:120px;">
                     <input class="form-control" type="text" placeholder="Search Communities" name="search_community">
@@ -67,7 +76,7 @@
             <form>
                 <a href="{% url 'create_community' %}" class="btn btn-secondary my-2">Create New Community</a>
             </form>
-
+            {% endif %}
         </div>
     </section>
 
@@ -106,6 +115,11 @@
             </div>
             {% endfor %}
         </div>
+            {% if logstatus == "Yes" %}
+            <form>
+                <a href="{% url 'logout' %}" class="btn btn-secondary my-2">See You Soon Kommy</a>
+            </form>
+            {% endif %}
         </div>
     </div>
 
