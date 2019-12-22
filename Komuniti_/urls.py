@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from komunitipage import views
-from Komuniti import settings
+from Komuniti_ import settings
 from django.contrib.staticfiles.urls import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 

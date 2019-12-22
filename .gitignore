@@ -4,5 +4,5 @@
 *.pyc
 __pycache__/
 migrations/
-Komuniti/.idea/local_settings.py
+Komuniti_/.idea/local_settings.py
 settings.py
