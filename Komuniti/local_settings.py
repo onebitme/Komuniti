@@ -1,3 +1,6 @@
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
 SECRET_KEY = '-^%osj2asg*)+bd7654erfgdjs$ucqx5p=&fj)l630&o96hqmhy#l*-ps_&(3q'
 
 DEBUG = True
